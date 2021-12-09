@@ -21,65 +21,64 @@ def init_game():
 
 #UI for in-game menu
 def game_menu(game_board, building_pool):
-    #implement auto Turn counter
-    print("\nTurn Counter")
+    while True:
+        #implement auto Turn counter
+        print("\nTurn Counter")
 
-    #implement display game board 
-    print("Board")
+        #implement display game board 
+        print(game_board)
 
-    #in-game menu
-    print("1. Build random building") 
-    print("2. Build random building")
-    print("3. See remaining buildings")
-    print("4. See current score")
-    print("\n5. Save game")
-    print("0. Exit to main menu")
-    try:
-        choice = int(input("Your choice? "))
+        #in-game menu
+        print("1. Build random building") 
+        print("2. Build random building")
+        print("3. See remaining buildings")
+        print("4. See current score")
+        print("\n5. Save game")
+        print("0. Exit to main menu")
+        try:
+            choice = int(input("Your choice? "))
+            if (choice > 5 or choice < 0 ):
+                raise ValueError
+        except ValueError:
+            print("\033[91m{}\033[00m".format("Input options 0-5!"))
+            continue
         if choice == 1:
             #code to add random building 1
-            return game_menu(game_board, building_pool)
+            print()
+
         elif choice == 2:
             #code to add random building 2
-            return game_menu(game_board, building_pool)
+            print()
+
         elif choice == 3:
             #code to see remaining buildings
-            return game_menu(game_board, building_pool)
+            print()
+            
         elif choice == 4:
             #code to see current score
-            return game_menu(game_board, building_pool)
+            print()
+
         elif choice == 5:
-            save_game()
-            return game_menu(game_board, building_pool)
+            save_game(game_board, building_pool)
+
         elif choice == 0:
             #code to delete existing game data 
             return
-        else:
-            print("\033[91m{}\033[00m".format("Input options 0-5!"))
-            return game_menu(game_board, building_pool) 
-    except ValueError:
-            print("\033[91m{}\033[00m".format("Input options 0-5!"))
-            return game_menu(game_board, building_pool)
-
 
 # Function to save game data
-def save_game():
-    #getting board data (implement get board function)
-    board = {1:"6",2:"5",3:"f"} #to change to game data, populating for function testing purpose
+def save_game(board, pool):
     pickle_out = open("save.pickle", "wb")
-    pickle.dump(board, pickle_out)
+    content = pickle.dump([board, pool], pickle_out)
     pickle_out.close()
+    return content
 
 # Function to load game data
 def load_game():
     pickle_in = open("save.pickle", "rb")
     board = pickle.load(pickle_in)
-    #implement an update function to populate saved board
-    # board = city.updatefunction
-    
-    #testing whether function works 
-    print(board)
-    return
+    game = board[0]
+    pool = board[1] 
+    return game_menu(game,pool)
 
 def main():
     game_board = None
