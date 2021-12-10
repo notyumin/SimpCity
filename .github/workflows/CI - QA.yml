@@ -1,7 +1,7 @@
 name: CI using QA's Tests
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 jobs:
