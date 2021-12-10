@@ -68,9 +68,8 @@ def game_menu(game_board, building_pool):
 # Function to save game data
 def save_game(board, pool):
     pickle_out = open("save.pickle", "wb")
-    content = pickle.dump([board, pool], pickle_out)
+    pickle.dump([board, pool], pickle_out)
     pickle_out.close()
-    return content
 
 # Function to load game data
 def load_game():
@@ -78,7 +77,7 @@ def load_game():
     board = pickle.load(pickle_in)
     game = board[0]
     pool = board[1] 
-    return game_menu(game,pool)
+    return (game,pool)
 
 def main():
     game_board = None
@@ -111,7 +110,9 @@ def main():
             game_menu(game_board, building_pool)
 
         elif option == 2:
-            load_game()
+            game_board, building_pool = load_game()
+            game_menu(game_board, building_pool)
+            
 
         elif option == 0:
             print("Bye!")
