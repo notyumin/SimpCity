@@ -1,3 +1,4 @@
+from random import randint
 # initial commit
 print("Welcome, mayor of Simp City")
 print("----------------------------")
@@ -32,8 +33,39 @@ def load_game():
     return
 
 
-def randomise_building():
-    return
+def randomise_building(building_pool):
+    building_1 = None
+    building_2 = None
+
+    total_buildings = 0
+    for key in building_pool:
+        total_buildings += building_pool[key]
+
+    # Convert building pool and values to list
+    building_categories = list(building_pool.keys())
+    building_values = list(building_pool.values())
+
+    if total_buildings == 0:
+        # No buildings can be built
+        pass
+    elif total_buildings < 2:
+        # Only one building can be built
+        #  Obtain building category with only one building left
+        building_1 = building_categories[building_values.index(1)]
+    else:
+        # Randomise and get 2 buildings
+        while True:
+            index = randint(0, 4)
+            if building_values[index] > 0:
+                # Decrement amount of building category
+                building_values[index] -= 1
+                # Set building for building 1/2
+                if (building_1 == None):
+                    building_1 = building_categories[index]
+                elif (building_2 == None):
+                    building_2 = building_categories[index]
+                    break
+    return [building_1, building_2]
 
 
 def main():
@@ -73,4 +105,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    randomise_building({"HSE": 0, "FAC": 0, "SHP": 0, "HWY": 0, "BCH": 1})
