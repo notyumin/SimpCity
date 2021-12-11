@@ -32,6 +32,10 @@ def load_game():
     return
 
 
+def randomise_building():
+    return
+
+
 def main():
     game_board = None
     building_pool = None
