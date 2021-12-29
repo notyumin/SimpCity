@@ -39,10 +39,33 @@ def game_menu(game_board, building_pool):
         print("3. See remaining buildings")
         print("4. See current score\n")
         print("5. Save game")
-        print("6. Exit to main menu")
+        print("0. Exit to main menu")
         print("Your choice?")
-        input()
+        option = input()
+
         turn_counter += 1
+        # Ensure inputted option is valid
+        try:
+            option = int(option)
+            if (option != 1 and option != 2 and option != 3 and option != 4 and option != 5 and option != 0):
+                raise ValueError
+        except ValueError:
+            print("\033[91m{}\033[00m".format("Invalid option!"))
+            continue
+
+        if option == 1:
+            continue
+        elif option == 2:
+            continue
+        elif option == 3:
+            continue
+        elif option == 4:
+            continue
+        elif option == 5:
+            continue
+        elif option == 0:
+            print("Returning to main menu...")
+            return
     return
 
 
