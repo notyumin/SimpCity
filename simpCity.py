@@ -24,7 +24,25 @@ def init_game():
 
 
 def game_menu(game_board, building_pool):
-    print("This is the game menu...")
+    turn_counter = 1
+    while True:
+        # Print turn and game   board
+        print("\nTurn " + str(turn_counter))
+        print_board(game_board)
+
+        # Get randomised building
+        buildings = randomise_building(building_pool)
+
+        # Print options for turn
+        print("1. Build a "+buildings[0])
+        print("2. Build a "+buildings[1])
+        print("3. See remaining buildings")
+        print("4. See current score\n")
+        print("5. Save game")
+        print("6. Exit to main menu")
+        print("Your choice?")
+        input()
+        turn_counter += 1
     return
 
 
@@ -68,6 +86,18 @@ def randomise_building(building_pool):
     return [building_1, building_2]
 
 
+def print_board(board):
+    print(f"    {'A':<6}{'B':<6}{'C':<6}{'D':<6}")
+    row_count = 1
+    for row in board:
+        print(" +-----+-----+-----+-----+")
+        #  Prints out contents of row center aligned and with a width of 5
+        print(f"{row_count}|{row[0]:^5}|{row[1]:^5}|{row[2]:^5}|{row[3]:^5}|")
+        row_count += 1
+    print(" +-----+-----+-----+-----+")
+    return
+
+
 def main():
     game_board = None
     building_pool = None
@@ -105,5 +135,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    randomise_building({"HSE": 0, "FAC": 0, "SHP": 0, "HWY": 0, "BCH": 1})
+    main()
