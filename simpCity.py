@@ -59,21 +59,21 @@ def game_menu(game_board, building_pool):
             print()
 
         elif choice == 5:
-            save_game(game_board, building_pool)
+            save_game(game_board, building_pool,"save.pickle")
 
         elif choice == 0:
             #code to delete existing game data 
             return
 
 # Function to save game data
-def save_game(board, pool):
-    pickle_out = open("save.pickle", "wb")
+def save_game(board, pool, filename):
+    pickle_out = open(filename, "wb")
     pickle.dump([board, pool], pickle_out)
     pickle_out.close()
 
 # Function to load game data
-def load_game():
-    pickle_in = open("save.pickle", "rb")
+def load_game(filename):
+    pickle_in = open(filename, "rb")
     board = pickle.load(pickle_in)
     game = board[0]
     pool = board[1] 
@@ -110,7 +110,7 @@ def main():
             game_menu(game_board, building_pool)
 
         elif option == 2:
-            game_board, building_pool = load_game()
+            game_board, building_pool = load_game("save.pickle")
             game_menu(game_board, building_pool)
             
 
