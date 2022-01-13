@@ -50,3 +50,25 @@ def test_save_game(board, pool, expectedBoard, expectedPool,fs):
     sBoard = pickle.load(pickle_in)
     assert sBoard[0] == expectedBoard
     assert sBoard[1] ==  expectedPool
+
+
+@pytest.mark.parametrize("board,column,row,building,expected_board", [
+    (
+    [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]],
+    "A",
+    "1",
+    "HWY",
+    [["HWY","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]]
+    ),
+    (
+    [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]],
+    "D",
+    "3",
+    "BCH",
+    [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","BCH",""]]
+    ),
+])
+def test_build_places_building_in_board(board,column,row,building,expected_board):
+    new_board = build(board,column,row,building)
+
+    assert new_board == expected_board

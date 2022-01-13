@@ -130,6 +130,9 @@ def print_board(board):
     print(" +-----+-----+-----+-----+")
     return
 
+def build():
+	# Build function
+	return
 
 def main():
     game_board = None
