@@ -62,10 +62,10 @@ def test_save_game(board, pool, expectedBoard, expectedPool,fs):
     ),
     (
     [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]],
-    "D",
+    "A",
     "3",
     "BCH",
-    [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","BCH",""]]
+    [["","HWY","",""],["","SHP","HSE","BCH"],["BCH","HSE","HSE","BCH"],["","","",""]]
     ),
 ])
 def test_build_places_building_in_board(board,column,row,building,expected_board):
@@ -76,7 +76,7 @@ def test_build_places_building_in_board(board,column,row,building,expected_board
 @pytest.mark.parametrize("board,column,row,building", [
     (
     [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]],
-    "A",
+    "B",
     "2",
     "HWY"
     ),
