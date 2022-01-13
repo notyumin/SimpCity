@@ -72,3 +72,21 @@ def test_build_places_building_in_board(board,column,row,building,expected_board
     new_board = build(board,column,row,building)
 
     assert new_board == expected_board
+
+@pytest.mark.parametrize("board,column,row,building", [
+    (
+    [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]],
+    "A",
+    "2",
+    "HWY"
+    ),
+    (
+    [["","HWY","",""],["","SHP","HSE","BCH"],["","HSE","HSE","BCH"],["","","",""]],
+    "E",
+    "3",
+    "BCH"
+    ),
+])
+def test_build_throws_error_for_invalid_placement(board,column,row,building):
+    with pytest.raises(Exception) as e_info:
+        new_board = build(board,column,row,building)
