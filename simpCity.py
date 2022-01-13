@@ -1,4 +1,5 @@
 from random import randint
+import pickle
 # initial commit
 print("Welcome, mayor of Simp City")
 print("----------------------------")
@@ -22,7 +23,7 @@ def init_game():
     }
     return game_board, building_pool
 
-
+#UI for in-game menu
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
@@ -69,10 +70,19 @@ def game_menu(game_board, building_pool):
     return
 
 
-def load_game():
-    # implementation
-    return
-
+# Function to load game data
+def load_game(filename):
+    pickle_in = open(filename, "rb")
+    board = pickle.load(pickle_in)
+    game = board[0]
+    pool = board[1] 
+    return (game,pool)
+  
+  # Function to save game data
+def save_game(board, pool, filename):
+    pickle_out = open(filename, "wb")
+    pickle.dump([board, pool], pickle_out)
+    pickle_out.close()
 
 def randomise_building(building_pool):
     building_1 = None
@@ -126,11 +136,13 @@ def main():
     building_pool = None
 
     while True:
+        print("\nWelcome, mayor of Simp City!")
+        print("----------------------------")
         print("\n1. Start new game")
         print("2. Load new game")
         print("\n0. Exit")
 
-        option = input("Your choice? :")
+        option = input("Your choice? ")
 
         # Ensure inputted option is valid
         try:
@@ -150,7 +162,9 @@ def main():
             game_menu(game_board, building_pool)
 
         elif option == 2:
-            load_game()
+            game_board, building_pool = load_game("save.pickle")
+            game_menu(game_board, building_pool)
+            
 
         elif option == 0:
             print("Bye!")
