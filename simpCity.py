@@ -130,9 +130,19 @@ def print_board(board):
     print(" +-----+-----+-----+-----+")
     return
 
-def build():
-	# Build function
-	return
+def build(board,column,row,building):
+    # Obtains index from  letter by getting unicode value of letter
+    column_index = ord(column.lower()) - 97
+    row_index = int(row) - 1
+
+    # Set building in board
+    
+    if (board[column_index][row_index]==""):
+        board[column_index][row_index] = building
+    else:
+        raise ValueError("Invalid placement")
+
+    return board
 
 def main():
     game_board = None
