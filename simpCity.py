@@ -1,5 +1,7 @@
 from random import randint
 import pickle
+from colorama import init
+init()
 
 
 def init_game():
@@ -189,9 +191,7 @@ def main():
             continue
 
         if option == 1:
-            if (game_board == None or building_pool == None):
-                # Get blank game board and default building pool
-                game_board, building_pool = init_game()
+            game_board, building_pool = init_game()
             # Start game menu
             game_menu(game_board, building_pool)
 
