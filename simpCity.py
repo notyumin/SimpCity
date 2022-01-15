@@ -1,5 +1,4 @@
 import pickle
-import re
 
 def init_game():
     game_board = [
@@ -25,9 +24,6 @@ def game_menu(game_board, building_pool):
         #implement auto Turn counter
         print("\nTurn Counter")
 
-        #implement display game board 
-        print(game_board)
-        print(building_pool)
 
         #in-game menu
         print("1. Build random building") 
