@@ -1,4 +1,5 @@
 import pickle
+import re
 
 def init_game():
     game_board = [
@@ -26,6 +27,7 @@ def game_menu(game_board, building_pool):
 
         #implement display game board 
         print(game_board)
+        print(building_pool)
 
         #in-game menu
         print("1. Build random building") 
@@ -81,7 +83,7 @@ def load_game(filename):
 #UI to choose city size/building pool
 def option_menu():
     size = None
-    building_pool = None
+    buildings = None
     while True: 
         print("\n1. Choose Building Pool")
         print("2. Choose City Size")
@@ -97,13 +99,17 @@ def option_menu():
                 continue
 
         if option == 1:
-            building_pool = choose_building()
+            buildings = choose_building()
 
         elif option == 2:
-            game_board, size = choose_citysize()
+            size = choose_citysize()
 
         elif option == 0:
-            game_board,building_pool = set_game(size,building_pool)
+            if size is None and buildings is None:
+                game_board = None
+                building_pool = None
+                return game_board, building_pool
+            game_board,building_pool = set_game(size,buildings)
             return game_board,building_pool
 
 #UI to choose citysize menu
@@ -127,24 +133,7 @@ def choose_citysize():
         return
     else:
         size = option+3
-        game_board = build_grid(size)
-        return (game_board,size)
-
-#build chosen city size
-def build_grid(size):
-    try:
-        if (size > 7 or size < 4 ):
-            raise ValueError
-    except ValueError:
-        # print red warning using ANSI escape codes
-        print("\033[91m{}\033[00m".format("Invalid dimension!"))
-        return
-    given_value = ''
-    column=[]
-    row=[]
-    column.extend([given_value for i in range(size)])
-    row.extend([column for i in range(size)])
-    return row
+        return (size)
 
 #UI to choose building pool
 def choose_building():
@@ -156,7 +145,7 @@ def choose_building():
         print("Beach (BCH)")
         print("Park (PRK)")
         print("Monument (MON)")
-        print("\nChoose 5 buildings from the list. Separate each building's abbreviations with a comma")
+        print("\nChoose 5 buildings from the list. Separate each building's abbreviations with a comma and space!\nAbbreviations should be all CAPS")
         print("eg: HSE, FAC, SHP, HWY, BCH")
         buildings = input("\nChoosen Building Pool:").split(', ')
 
@@ -187,26 +176,51 @@ def choose_building():
                 # print red warning using ANSI escape codes
                 print("\033[91m{}\033[00m".format("Duplicate Buildings!"))
                 return
-    
-        building_pool = build_pool(buildings)
-        return building_pool
+        return buildings
+
+#build chosen city size
+def build_grid(size):
+    try:
+        if (size > 7 or size < 4 ):
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid dimension!"))
+        return
+    given_value = ''
+    column=[]
+    row=[]
+    column.extend([given_value for i in range(size)])
+    row.extend([column for i in range(size)])
+    return row
 
 #build building pool
-def build_pool(buildings):
+def build_pool(buildings,size):
+    if size is None:
+        size = 4
     building_pool = {}
+    num = int(((size*size)/16)*8)
     for i in buildings:
-        building_pool[i] = 8
+        building_pool[i] = num
     return building_pool
 
 #finalize user's choice
-def set_game(size, building_pool):
+def set_game(size, buildings):
     if size is None: 
-        game_board = [
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ]
+        size = 4
+        game_board = build_grid(size)
+        building_pool = build_pool(buildings,size)
+        return game_board, building_pool
+
+    elif buildings is None:
+        game_board = build_grid(size)
+        default_pool=['HSE', 'FAC', 'SHP', 'HWY', 'BCH']
+        building_pool = build_pool(default_pool,size)
+        return game_board, building_pool
+
+    else:
+        game_board = build_grid(size)
+        building_pool = build_pool(buildings,size)
         return game_board, building_pool
 
 
