@@ -136,13 +136,6 @@ def randomise_building(building_pool):
 
 
 def print_board(board):
-    board = [
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-    ]
     header = f"    "
     # Get column length of board and write header
     for i in range(len(board[0])):
