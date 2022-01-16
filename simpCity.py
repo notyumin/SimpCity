@@ -1,5 +1,6 @@
 from random import randint
 import pickle
+
 # initial commit
 print("Welcome, mayor of Simp City")
 print("----------------------------")
@@ -8,22 +9,19 @@ print("----------------------------")
 def init_game():
     game_board = [
         # e.g. ['SHP','FAC','BCH','HWY']
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ['', '', '', ''],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
     ]
     # Building name:count of buildings
-    building_pool = {
-        "HSE": 8,
-        "FAC": 8,
-        "SHP": 8,
-        "HWY": 8,
-        "BCH": 8
-    }
+    building_pool = {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8}
     return game_board, building_pool
 
-#UI for in-game menu
+
+# UI for in-game menu
+
+
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
@@ -35,8 +33,8 @@ def game_menu(game_board, building_pool):
         buildings = randomise_building(building_pool)
 
         # Print options for turn
-        print("1. Build a "+buildings[0])
-        print("2. Build a "+buildings[1])
+        print("1. Build a " + buildings[0])
+        print("2. Build a " + buildings[1])
         print("3. See remaining buildings")
         print("4. See current score\n")
         print("5. Save game")
@@ -48,7 +46,14 @@ def game_menu(game_board, building_pool):
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if (option != 1 and option != 2 and option != 3 and option != 4 and option != 5 and option != 0):
+            if (
+                option != 1
+                and option != 2
+                and option != 3
+                and option != 4
+                and option != 5
+                and option != 0
+            ):
                 raise ValueError
         except ValueError:
             print("\033[91m{}\033[00m".format("Invalid option!"))
@@ -75,14 +80,18 @@ def load_game(filename):
     pickle_in = open(filename, "rb")
     board = pickle.load(pickle_in)
     game = board[0]
-    pool = board[1] 
-    return (game,pool)
-  
-  # Function to save game data
+    pool = board[1]
+    return (game, pool)
+
+
+# Function to save game data
+
+
 def save_game(board, pool, filename):
     pickle_out = open(filename, "wb")
     pickle.dump([board, pool], pickle_out)
     pickle_out.close()
+
 
 def randomise_building(building_pool):
     building_1 = None
@@ -111,23 +120,39 @@ def randomise_building(building_pool):
                 # Decrement amount of building category
                 building_values[index] -= 1
                 # Set building for building 1/2
-                if (building_1 == None):
+                if building_1 == None:
                     building_1 = building_categories[index]
-                elif (building_2 == None):
+                elif building_2 == None:
                     building_2 = building_categories[index]
                     break
     return [building_1, building_2]
 
 
 def print_board(board):
-    print(f"    {'A':<6}{'B':<6}{'C':<6}{'D':<6}")
+    board = [
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+    ]
+    header = f"    "
+    # Get column length of board and write header
+    for i in range(len(board[0])):
+        header += f"{chr(65+i):<6}"
+    print(header)
+
     row_count = 1
     for row in board:
-        print(" +-----+-----+-----+-----+")
+        col_separator = " +" + (len(board[0]) * "-----+")
+        print(col_separator)
         #  Prints out contents of row center aligned and with a width of 5
-        print(f"{row_count}|{row[0]:^5}|{row[1]:^5}|{row[2]:^5}|{row[3]:^5}|")
+        row_content = f"{row_count}|"
+        for col in row:
+            row_content += f"{col:^5}|"
+        print(row_content)
         row_count += 1
-    print(" +-----+-----+-----+-----+")
+    print(col_separator)
     return
 
 
@@ -147,7 +172,7 @@ def main():
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if (option != 1 and option != 2 and option != 0):
+            if option != 1 and option != 2 and option != 0:
                 raise ValueError
         except ValueError:
             # print red warning using ANSI escape codes
@@ -155,7 +180,7 @@ def main():
             continue
 
         if option == 1:
-            if (game_board == None or building_pool == None):
+            if game_board == None or building_pool == None:
                 # Get blank game board and default building pool
                 game_board, building_pool = init_game()
             # Start game menu
@@ -164,7 +189,6 @@ def main():
         elif option == 2:
             game_board, building_pool = load_game("save.pickle")
             game_menu(game_board, building_pool)
-            
 
         elif option == 0:
             print("Bye!")
