@@ -1,26 +1,5 @@
 from random import randint
 import pickle
-# initial commit
-print("Welcome, mayor of Simp City")
-print("----------------------------")
-
-def init_game():
-    game_board = [
-        # e.g. ['SHP','FAC','BCH','HWY']
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ['', '', '', ''],
-        ['', '', '', ''],
-    ]
-    # Building name:count of buildings
-    building_pool = {
-        "HSE": 8,
-        "FAC": 8,
-        "SHP": 8,
-        "HWY": 8,
-        "BCH": 8
-    }
-    return game_board, building_pool
 
 #UI for in-game menu
 def game_menu(game_board, building_pool):
@@ -67,7 +46,6 @@ def game_menu(game_board, building_pool):
             print("Returning to main menu...")
             return
     return
-
 
 # Function to load game data
 def load_game(filename):
@@ -132,8 +110,8 @@ def print_board(board):
 
 #UI to choose city size/building pool
 def option_menu():
-    size = None
     buildings = None
+    size = None
     while True: 
         print("\n1. Choose Building Pool")
         print("2. Choose City Size")
@@ -155,12 +133,7 @@ def option_menu():
             size = choose_citysize()
 
         elif option == 0:
-            if size is None and buildings is None:
-                game_board = None
-                building_pool = None
-                return game_board, building_pool
-            game_board,building_pool = set_game(size,buildings)
-            return game_board,building_pool
+            return size,buildings
 
 #UI to choose citysize menu
 def choose_citysize():
@@ -256,7 +229,13 @@ def build_pool(buildings,size):
 
 #finalize user's choice
 def set_game(size, buildings):
-    if size is None: 
+    if buildings is None and size is None: 
+        size = 4
+        default_pool=['HSE', 'FAC', 'SHP', 'HWY', 'BCH']
+        game_board = build_grid(size)
+        building_pool = build_pool(default_pool,size)
+        return game_board, building_pool
+    elif size is None: 
         size = 4
         game_board = build_grid(size)
         building_pool = build_pool(buildings,size)
@@ -267,7 +246,7 @@ def set_game(size, buildings):
         default_pool=['HSE', 'FAC', 'SHP', 'HWY', 'BCH']
         building_pool = build_pool(default_pool,size)
         return game_board, building_pool
-
+    
     else:
         game_board = build_grid(size)
         building_pool = build_pool(buildings,size)
@@ -275,8 +254,8 @@ def set_game(size, buildings):
 
 
 def main():
-    game_board = None
-    building_pool = None
+    size = None
+    buildings = None
 
     while True:
         print("\nWelcome, mayor of Simp City!")
@@ -299,10 +278,7 @@ def main():
             continue
 
         if option == 1:
-            if (game_board == None or building_pool == None):
-                # Get blank game board and default building pool
-                game_board, building_pool = init_game()
-            # Start game menu
+            game_board, building_pool = set_game(size, buildings)
             game_menu(game_board, building_pool)
 
         elif option == 2:
@@ -310,7 +286,7 @@ def main():
             game_menu(game_board, building_pool)
 
         elif option == 3:
-            game_board, building_pool = option_menu()
+            size, buildings = option_menu()
 
         elif option == 0:
             print("Bye!")

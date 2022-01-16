@@ -3,15 +3,6 @@ from simpCity import *
 import pickle
 
 
-def test_init_game_creates_game_board_and_pool():
-    # Act
-    game_board, building_pool = init_game()
-
-    # Assert
-    assert game_board == [['', '', '', ''], ['', '', '', ''],
-                          ['', '', '', ''], ['', '', '', ''], ]
-    assert building_pool == {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8}
-
 @pytest.mark.parametrize("pool,  expected_buildings", [
     ({"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
      ["HSE", "FAC", "SHP", "HWY", "BCH"]),
