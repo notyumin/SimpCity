@@ -1,33 +1,30 @@
-
 name: CI for test
 
 on:
   pull_request:
     branches: [development]
 
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          repository: Harjun751/CITest
+          token: ${{ secrets.NOTYUMIN_PAT }}
+
       - name: Setup Python 3.8 test
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest pytest-cov colorama pyfakefs 
 
-      - name: Config git
-        run: | 
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git pull origin ${{ github.head_ref }} --rebase
-
-      - name: Format code using black
+      - name: Format using black
         uses: rickstaa/action-black@v1
         id: action_black
         with:
@@ -36,19 +33,21 @@ jobs:
       - name: Push formatted changes
         if: steps.action_black.outputs.is_formatted == 'true'
         run: |
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
             git commit -am "Formatted code"
             git push origin HEAD:${{ github.head_ref }}
 
-      - name: Label the PR size
-        uses: coverwallet/pr-labeler@v1.2.1
-        with:
-          xs_max_size: "10"
-          s_max_size: "100"
-          m_max_size: "500"
-          l_max_size: "1000"
-          exclude_files: ".txt"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov colorama pyfakefs
+
+      - name: Config git
+        run: | 
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin ${{ github.head_ref }} --rebase
 
       - name: Begin Pytest
         run: |
