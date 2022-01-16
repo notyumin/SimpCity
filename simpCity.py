@@ -1,7 +1,7 @@
 from random import randint
 import pickle
 
-#UI for in-game menu
+# UI for in-game menu
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
@@ -13,8 +13,8 @@ def game_menu(game_board, building_pool):
         buildings = randomise_building(building_pool)
 
         # Print options for turn
-        print("1. Build a "+buildings[0])
-        print("2. Build a "+buildings[1])
+        print("1. Build a " + buildings[0])
+        print("2. Build a " + buildings[1])
         print("3. See remaining buildings")
         print("4. See current score\n")
         print("5. Save game")
@@ -26,7 +26,14 @@ def game_menu(game_board, building_pool):
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if (option != 1 and option != 2 and option != 3 and option != 4 and option != 5 and option != 0):
+            if (
+                option != 1
+                and option != 2
+                and option != 3
+                and option != 4
+                and option != 5
+                and option != 0
+            ):
                 raise ValueError
         except ValueError:
             print("\033[91m{}\033[00m".format("Invalid option!"))
@@ -47,19 +54,22 @@ def game_menu(game_board, building_pool):
             return
     return
 
+
 # Function to load game data
 def load_game(filename):
     pickle_in = open(filename, "rb")
     board = pickle.load(pickle_in)
     game = board[0]
-    pool = board[1] 
-    return (game,pool)
-  
-  # Function to save game data
+    pool = board[1]
+    return (game, pool)
+
+
+# Function to save game data
 def save_game(board, pool, filename):
     pickle_out = open(filename, "wb")
     pickle.dump([board, pool], pickle_out)
     pickle_out.close()
+
 
 def randomise_building(building_pool):
     building_1 = None
@@ -88,9 +98,9 @@ def randomise_building(building_pool):
                 # Decrement amount of building category
                 building_values[index] -= 1
                 # Set building for building 1/2
-                if (building_1 == None):
+                if building_1 == None:
                     building_1 = building_categories[index]
-                elif (building_2 == None):
+                elif building_2 == None:
                     building_2 = building_categories[index]
                     break
     return [building_1, building_2]
@@ -108,23 +118,23 @@ def print_board(board):
     return
 
 
-#UI to choose city size/building pool
+# UI to choose city size/building pool
 def option_menu():
     buildings = None
     size = None
-    while True: 
+    while True:
         print("\n1. Choose Building Pool")
         print("2. Choose City Size")
         print("\n0. Back to Main Menu")
 
         option = int(input("Your choice? "))
         try:
-            if (option != 1 and option != 2 and option!=0):
-                    raise ValueError
+            if option != 1 and option != 2 and option != 0:
+                raise ValueError
         except ValueError:
-                # print red warning using ANSI escape codes
-                print("\033[91m{}\033[00m".format("Invalid option!"))
-                continue
+            # print red warning using ANSI escape codes
+            print("\033[91m{}\033[00m".format("Invalid option!"))
+            continue
 
         if option == 1:
             buildings = choose_building()
@@ -133,9 +143,10 @@ def option_menu():
             size = choose_citysize()
 
         elif option == 0:
-            return size,buildings
+            return size, buildings
 
-#UI to choose citysize menu
+
+# UI to choose citysize menu
 def choose_citysize():
     print("\nCity Size available in the SimpCity: ")
     print("\n1. 4x4")
@@ -146,110 +157,116 @@ def choose_citysize():
 
     option = int(input("Your choice? "))
     try:
-        if (option > 4 or option < 0 ):
-                raise ValueError
+        if option > 4 or option < 0:
+            raise ValueError
     except ValueError:
-            # print red warning using ANSI escape codes
-            print("\033[91m{}\033[00m".format("Invalid option!"))
-            return
-    if (option == 0):
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid option!"))
+        return
+    if option == 0:
         return
     else:
-        size = option+3
-        return (size)
+        size = option + 3
+        return size
 
-#UI to choose building pool
+
+# UI to choose building pool
 def choose_building():
-        print("\nBuildings in the SimpCity: ")
-        print("\nHouse (HSE)")
-        print("Factory (FAC)")
-        print("Shop (SHP)")
-        print("Highway (HWY)")
-        print("Beach (BCH)")
-        print("Park (PRK)")
-        print("Monument (MON)")
-        print("\nChoose 5 buildings from the list. Separate each building's abbreviations with a comma and space!\nAbbreviations should be all CAPS")
-        print("eg: HSE, FAC, SHP, HWY, BCH")
-        buildings = input("\nChoosen Building Pool:").split(', ')
+    print("\nBuildings in the SimpCity: ")
+    print("\nHouse (HSE)")
+    print("Factory (FAC)")
+    print("Shop (SHP)")
+    print("Highway (HWY)")
+    print("Beach (BCH)")
+    print("Park (PRK)")
+    print("Monument (MON)")
+    print(
+        "\nChoose 5 buildings from the list. Separate each building's abbreviations with a comma and space!\nAbbreviations should be all CAPS"
+    )
+    print("eg: HSE, FAC, SHP, HWY, BCH")
+    buildings = input("\nChoosen Building Pool:").split(", ")
 
-        # input not 5 buildings
-        try:
-            if len(buildings)!=5:
-                        raise ValueError
-        except ValueError:
-                # print red warning using ANSI escape codes
-                print("\033[91m{}\033[00m".format("Invalid option! Should be 5 buildings"))
-                return
+    # input not 5 buildings
+    try:
+        if len(buildings) != 5:
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid option! Should be 5 buildings"))
+        return
 
-        #input not in building list 
-        try:
-            for i in buildings:
-                if i not in ['HSE', 'FAC', 'SHP', 'HWY', 'BCH', 'PRK', 'MON']:
-                    raise ValueError
-        except ValueError:
-                # print red warning using ANSI escape codes
-                print("\033[91m{}\033[00m".format("Invalid Building!"))
-                return
+    # input not in building list
+    try:
+        for i in buildings:
+            if i not in ["HSE", "FAC", "SHP", "HWY", "BCH", "PRK", "MON"]:
+                raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid Building!"))
+        return
 
-        #input duplicate buildings 
-        try:
-            if len(buildings) != len(set(buildings)):
-                    raise ValueError
-        except ValueError:
-                # print red warning using ANSI escape codes
-                print("\033[91m{}\033[00m".format("Duplicate Buildings!"))
-                return
-        return buildings
+    # input duplicate buildings
+    try:
+        if len(buildings) != len(set(buildings)):
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Duplicate Buildings!"))
+        return
+    return buildings
 
-#build chosen city size
+
+# build chosen city size
 def build_grid(size):
     try:
-        if (size > 7 or size < 4 ):
+        if size > 7 or size < 4:
             raise ValueError
     except ValueError:
         # print red warning using ANSI escape codes
         print("\033[91m{}\033[00m".format("Invalid dimension!"))
         return
-    given_value = ''
-    column=[]
-    row=[]
+    given_value = ""
+    column = []
+    row = []
     column.extend([given_value for i in range(size)])
     row.extend([column for i in range(size)])
     return row
 
-#build building pool
-def build_pool(buildings,size):
+
+# build building pool
+def build_pool(buildings, size):
     if size is None:
         size = 4
     building_pool = {}
-    num = int(((size*size)/16)*8)
+    num = int(((size * size) / 16) * 8)
     for i in buildings:
         building_pool[i] = num
     return building_pool
 
-#finalize user's choice
+
+# finalize user's choice
 def set_game(size, buildings):
-    if buildings is None and size is None: 
+    if buildings is None and size is None:
         size = 4
-        default_pool=['HSE', 'FAC', 'SHP', 'HWY', 'BCH']
+        default_pool = ["HSE", "FAC", "SHP", "HWY", "BCH"]
         game_board = build_grid(size)
-        building_pool = build_pool(default_pool,size)
+        building_pool = build_pool(default_pool, size)
         return game_board, building_pool
-    elif size is None: 
+    elif size is None:
         size = 4
         game_board = build_grid(size)
-        building_pool = build_pool(buildings,size)
+        building_pool = build_pool(buildings, size)
         return game_board, building_pool
 
     elif buildings is None:
         game_board = build_grid(size)
-        default_pool=['HSE', 'FAC', 'SHP', 'HWY', 'BCH']
-        building_pool = build_pool(default_pool,size)
+        default_pool = ["HSE", "FAC", "SHP", "HWY", "BCH"]
+        building_pool = build_pool(default_pool, size)
         return game_board, building_pool
-    
+
     else:
         game_board = build_grid(size)
-        building_pool = build_pool(buildings,size)
+        building_pool = build_pool(buildings, size)
         return game_board, building_pool
 
 
@@ -270,7 +287,7 @@ def main():
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if (option != 1 and option != 2 and option != 3 and option != 0):
+            if option != 1 and option != 2 and option != 3 and option != 0:
                 raise ValueError
         except ValueError:
             # print red warning using ANSI escape codes
