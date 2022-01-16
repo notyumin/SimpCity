@@ -3,6 +3,7 @@ import pickle
 
 # UI for in-game menu
 
+
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
@@ -66,6 +67,7 @@ def load_game(filename):
 
 
 # Function to save game data
+
 
 def save_game(board, pool, filename):
     pickle_out = open(filename, "wb")
