@@ -136,14 +136,30 @@ def randomise_building(building_pool):
 
 
 def print_board(board):
-    print(f"    {'A':<6}{'B':<6}{'C':<6}{'D':<6}")
+    board = [
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+    ]
+    header = f"    "
+    # Get column length of board and write header
+    for i in range(len(board[0])):
+        header += f"{chr(65+i):<6}"
+    print(header)
+
     row_count = 1
     for row in board:
-        print(" +-----+-----+-----+-----+")
+        col_separator = " +" + (len(board[0]) * "-----+")
+        print(col_separator)
         #  Prints out contents of row center aligned and with a width of 5
-        print(f"{row_count}|{row[0]:^5}|{row[1]:^5}|{row[2]:^5}|{row[3]:^5}|")
+        row_content = f"{row_count}|"
+        for col in row:
+            row_content += f"{col:^5}|"
+        print(row_content)
         row_count += 1
-    print(" +-----+-----+-----+-----+")
+    print(col_separator)
     return
 
 
