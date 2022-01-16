@@ -23,7 +23,9 @@ def init_game():
     }
     return game_board, building_pool
 
-#UI for in-game menu
+# UI for in-game menu
+
+
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
@@ -75,14 +77,17 @@ def load_game(filename):
     pickle_in = open(filename, "rb")
     board = pickle.load(pickle_in)
     game = board[0]
-    pool = board[1] 
-    return (game,pool)
-  
+    pool = board[1]
+    return (game, pool)
+
   # Function to save game data
+
+
 def save_game(board, pool, filename):
     pickle_out = open(filename, "wb")
     pickle.dump([board, pool], pickle_out)
     pickle_out.close()
+
 
 def randomise_building(building_pool):
     building_1 = None
@@ -120,14 +125,29 @@ def randomise_building(building_pool):
 
 
 def print_board(board):
-    print(f"    {'A':<6}{'B':<6}{'C':<6}{'D':<6}")
+    board = [['', '', '', '', '', ''],
+             ['', '', '', '', '', ''],
+             ['', '', '', '', '', ''],
+             ['', '', '', '', '', ''],
+             ['', '', '', '', '', ''],
+             ]
+    header = f"    "
+    # Get column length of board and write header
+    for i in range(len(board[0])):
+        header += f"{chr(65+i):<6}"
+    print(header)
+
     row_count = 1
     for row in board:
-        print(" +-----+-----+-----+-----+")
+        col_separator = " +" + (len(board[0])*"-----+")
+        print(col_separator)
         #  Prints out contents of row center aligned and with a width of 5
-        print(f"{row_count}|{row[0]:^5}|{row[1]:^5}|{row[2]:^5}|{row[3]:^5}|")
+        row_content = f"{row_count}|"
+        for col in row:
+            row_content += f"{col:^5}|"
+        print(row_content)
         row_count += 1
-    print(" +-----+-----+-----+-----+")
+    print(col_separator)
     return
 
 
@@ -164,7 +184,6 @@ def main():
         elif option == 2:
             game_board, building_pool = load_game("save.pickle")
             game_menu(game_board, building_pool)
-            
 
         elif option == 0:
             print("Bye!")
