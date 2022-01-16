@@ -1,3 +1,4 @@
+
 name: CI for test
 
 on:
@@ -25,12 +26,18 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git pull origin ${{ github.head_ref }} --rebase
-          
+
       - name: Format code using black
         uses: rickstaa/action-black@v1
         id: action_black
         with:
           black_args: "."
+      
+      - name: Push formatted changes
+        if: steps.action_black.outputs.is_formatted == 'true'
+        run: |
+            git commit -am "Formatted code"
+            git push origin HEAD:${{ github.head_ref }}
 
       - name: Push formatted changes
         if: steps.action_black.outputs.is_formatted == 'true'
