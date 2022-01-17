@@ -156,65 +156,68 @@ def test_build_throws_error_for_invalid_placement(board, column, row, building):
         new_board = build(board, column, row, building)
 
 
-@pytest.mark.parametrize("board, expected_score", [
-    (
-        [
-            ["HWY", "HWY", "HWY", "FAC"],
-            ["BCH", "HSE", "HSE", "SHP"],
-            ["BCH", "SHP", "HSE", "FAC"],
-            ["HWY", "FAC", "HWY", "HWY"]
-        ],
-        42
-    ),
-    (
-        [
-            ["", "HWY", "", ""],
-            ["", "SHP", "HSE", "BCH"],
-            ["", "HSE", "HSE", "BCH"],
-            ["", "", "", ""]
-        ],
-        19
-    ),
-    (
-        [
-            ["", "HSE", "FAC", "BCH"],
-            ["", "FAC", "BCH", ""],
-            ["", "SHP", "", "BCH"],
-            ["HWY", "", "", ""]
-        ],
-        14
-    ),
-    (
-        [
-            ["PRK", "PRK", "", "", "MON"],
-            ["PRK", "PRK", "", "", ""],
-            ["", "", "", "", ""],
-            ["", "MON", "", "MON", ""],
-            ["MON", "", "", "", "MON"]
-        ],
-        36
-    ),
-    (
-        [
-            ["PRK", "PRK", "", "", "PRK"],
-            ["PRK", "PRK", "", "", "PRK"],
-            ["", "", "PRK", "", "PRK"],
-            ["", "MON", "", "MON", ""],
-            ["MON", "", "", "", "MON"]
-        ],
-        31
-    ),
-    (
-        [
-            ["PRK", "PRK", "PRK", "", ""],
-            ["PRK", "PRK", "", "", ""],
-            ["PRK", "", "", "", ""],
-            ["", "", "", "", ""],
-            ["", "", "", "", ""]
-        ],
-        23
-    ),
-])
+@pytest.mark.parametrize(
+    "board, expected_score",
+    [
+        (
+            [
+                ["HWY", "HWY", "HWY", "FAC"],
+                ["BCH", "HSE", "HSE", "SHP"],
+                ["BCH", "SHP", "HSE", "FAC"],
+                ["HWY", "FAC", "HWY", "HWY"],
+            ],
+            42,
+        ),
+        (
+            [
+                ["", "HWY", "", ""],
+                ["", "SHP", "HSE", "BCH"],
+                ["", "HSE", "HSE", "BCH"],
+                ["", "", "", ""],
+            ],
+            19,
+        ),
+        (
+            [
+                ["", "HSE", "FAC", "BCH"],
+                ["", "FAC", "BCH", ""],
+                ["", "SHP", "", "BCH"],
+                ["HWY", "", "", ""],
+            ],
+            14,
+        ),
+        (
+            [
+                ["PRK", "PRK", "", "", "MON"],
+                ["PRK", "PRK", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "MON", "", "MON", ""],
+                ["MON", "", "", "", "MON"],
+            ],
+            36,
+        ),
+        (
+            [
+                ["PRK", "PRK", "", "", "PRK"],
+                ["PRK", "PRK", "", "", "PRK"],
+                ["", "", "PRK", "", "PRK"],
+                ["", "MON", "", "MON", ""],
+                ["MON", "", "", "", "MON"],
+            ],
+            31,
+        ),
+        (
+            [
+                ["PRK", "PRK", "PRK", "", ""],
+                ["PRK", "PRK", "", "", ""],
+                ["PRK", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+            ],
+            23,
+        ),
+    ],
+)
 def test_calculate_score_returns_valid_score(board, expected_score):
     # Act
     calculated_score = calculate_score(board)
@@ -223,48 +226,91 @@ def test_calculate_score_returns_valid_score(board, expected_score):
     assert calculated_score == expected_score
 
 
-@pytest.mark.parametrize("board, expected_park_coords", [
-    (
-        [
-            ["PRK", "PRK", "PRK", "PRK"],
-            ["PRK", "", "", "PRK"],
-            ["PRK", "", "", "PRK"],
-            ["PRK", "PRK", "PRK", "PRK"]
-        ],
-        [(0, 0), (1, 0), (2, 0), (3, 0), (3, 1), (3, 2),
-         (3, 3), (2, 3), (1, 3), (0, 3), (0, 2), (0, 1)]
-    ),
-    (
-        [
-            ["PRK", "PRK", "", ""],
-            ["PRK", "PRK", "", ""],
-            ["", "", "", ""],
-            ["", "", "", ""]
-        ],
-        [(0, 0), (1, 0), (1, 1), (0, 1)]
-    ),
-    (
-        [
-            ["PRK", "PRK", "PRK", "PRK", "PRK"],
-            ["PRK",    "", "PRK",    "", "PRK"],
-            ["PRK",    "", "PRK",    "", "PRK"],
-            ["PRK", "PRK", "PRK", "PRK", "PRK"]
-        ],
-        [(0, 0), (1, 0), (2, 0), (3, 0), (3, 1), (3, 2),
-         (3, 3), (3, 4), (2, 4), (1, 4), (0, 4), (0, 3), (0, 2), (1, 2), (2, 2), (0, 1)]
-    ),
-    (
-        [
-            ["PRK", "PRK", "PRK", "PRK"],
-            ["", "PRK",   "",     ""],
-            ["", "PRK",   "",     ""],
-            ["PRK", "PRK", "PRK", "PRK"]
-        ],
-        [(0, 0), (0, 1), (0, 2), (0, 3), (1, 1),
-         (2, 1), (3, 0), (3, 1), (3, 2), (3, 3)]
-    ),
-])
-def test_crawl_parks_obtains_coords_list_of_horizontally_and_vertically_connected_parks(board, expected_park_coords):
+@pytest.mark.parametrize(
+    "board, expected_park_coords",
+    [
+        (
+            [
+                ["PRK", "PRK", "PRK", "PRK"],
+                ["PRK", "", "", "PRK"],
+                ["PRK", "", "", "PRK"],
+                ["PRK", "PRK", "PRK", "PRK"],
+            ],
+            [
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (3, 0),
+                (3, 1),
+                (3, 2),
+                (3, 3),
+                (2, 3),
+                (1, 3),
+                (0, 3),
+                (0, 2),
+                (0, 1),
+            ],
+        ),
+        (
+            [
+                ["PRK", "PRK", "", ""],
+                ["PRK", "PRK", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+            ],
+            [(0, 0), (1, 0), (1, 1), (0, 1)],
+        ),
+        (
+            [
+                ["PRK", "PRK", "PRK", "PRK", "PRK"],
+                ["PRK", "", "PRK", "", "PRK"],
+                ["PRK", "", "PRK", "", "PRK"],
+                ["PRK", "PRK", "PRK", "PRK", "PRK"],
+            ],
+            [
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (3, 0),
+                (3, 1),
+                (3, 2),
+                (3, 3),
+                (3, 4),
+                (2, 4),
+                (1, 4),
+                (0, 4),
+                (0, 3),
+                (0, 2),
+                (1, 2),
+                (2, 2),
+                (0, 1),
+            ],
+        ),
+        (
+            [
+                ["PRK", "PRK", "PRK", "PRK"],
+                ["", "PRK", "", ""],
+                ["", "PRK", "", ""],
+                ["PRK", "PRK", "PRK", "PRK"],
+            ],
+            [
+                (0, 0),
+                (0, 1),
+                (0, 2),
+                (0, 3),
+                (1, 1),
+                (2, 1),
+                (3, 0),
+                (3, 1),
+                (3, 2),
+                (3, 3),
+            ],
+        ),
+    ],
+)
+def test_crawl_parks_obtains_coords_list_of_horizontally_and_vertically_connected_parks(
+    board, expected_park_coords
+):
     # Act
     park_coordinates = crawl_parks(board, 0, 0, [])
 

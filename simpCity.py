@@ -233,15 +233,13 @@ def calculate_score(game_board):
     PRK_scores = []
     MON_scores = []
 
-    PRK_score_dict = {
-        1: 1, 2: 3, 3: 8, 4: 16, 5: 22, 6: 23, 7: 24, 8: 25
-    }
+    PRK_score_dict = {1: 1, 2: 3, 3: 8, 4: 16, 5: 22, 6: 23, 7: 24, 8: 25}
 
     coordinate_blacklist = []
 
     for i in range(0, len(game_board)):
         for y in range(0, len(game_board)):
-            if ((i, y) in coordinate_blacklist):
+            if (i, y) in coordinate_blacklist:
                 # Skip coord
                 continue
 
@@ -258,7 +256,9 @@ def calculate_score(game_board):
                 factory_count += 1
 
             elif curr_item == "HSE":
-                item_above, item_below, item_right, item_left = get_items_around(game_board, i, y)
+                item_above, item_below, item_right, item_left = get_items_around(
+                    game_board, i, y
+                )
                 sub_total = 0
                 for item in [item_above, item_below, item_right, item_left]:
                     if item == "FAC":
@@ -272,7 +272,9 @@ def calculate_score(game_board):
                 HSE_scores.append(sub_total)
 
             elif curr_item == "SHP":
-                item_above, item_below, item_right, item_left = get_items_around(game_board, i, y)
+                item_above, item_below, item_right, item_left = get_items_around(
+                    game_board, i, y
+                )
                 sub_total = 0
                 unique_buildings = ["BCH", "FAC", "HSE", "HWY"]
                 for item in [item_above, item_below, item_right, item_left]:
@@ -286,7 +288,7 @@ def calculate_score(game_board):
                 # Each individual highway gets scored based on how long the highway is
                 length = 1
                 while True:
-                    item_right = get_items_around(game_board, i, y+x)[2]
+                    item_right = get_items_around(game_board, i, y + x)[2]
                     x += 1
                     if item_right == "HWY":
                         length += 1
@@ -294,7 +296,7 @@ def calculate_score(game_board):
                         break
                 x = 0
                 while True:
-                    item_left = get_items_around(game_board, i, y-x)[3]
+                    item_left = get_items_around(game_board, i, y - x)[3]
                     x += 1
                     if item_left == "HWY":
                         length += 1
@@ -312,12 +314,16 @@ def calculate_score(game_board):
                 monument_count += 1
 
                 # bools to check if item is in corner
-                is_bottom_corner = i+1 > (len(game_board)-1)
-                is_right_corner = y+1 > (len(game_board[0])-1)
-                is_top_corner = i-1 < 0
-                is_left_corner = y-1 < 0
-                corner_checks = [is_right_corner,
-                                 is_bottom_corner, is_left_corner, is_top_corner]
+                is_bottom_corner = i + 1 > (len(game_board) - 1)
+                is_right_corner = y + 1 > (len(game_board[0]) - 1)
+                is_top_corner = i - 1 < 0
+                is_left_corner = y - 1 < 0
+                corner_checks = [
+                    is_right_corner,
+                    is_bottom_corner,
+                    is_left_corner,
+                    is_top_corner,
+                ]
 
                 # For an item to  be in a corner, exactly 2 of the checks must eval to true
                 if corner_checks.count(True) == 2:
@@ -330,56 +336,67 @@ def calculate_score(game_board):
     FAC_scores = [min(factory_count, 4) for i in range(factory_count)]
 
     # MON
-    if (monument_corner_count >= 3):
+    if monument_corner_count >= 3:
         # Override monument score
         MON_scores = [4 for i in range(monument_count)]
 
     total_score = 0
-    i =  0
-    building_type_scores = [BCH_scores, HSE_scores, SHP_scores, HWY_scores, FAC_scores, MON_scores, PRK_scores]
+    i = 0
+    building_type_scores = [
+        BCH_scores,
+        HSE_scores,
+        SHP_scores,
+        HWY_scores,
+        FAC_scores,
+        MON_scores,
+        PRK_scores,
+    ]
     while i < len(building_type_scores):
-        if (len(building_type_scores[i]) != 0):
+        if len(building_type_scores[i]) != 0:
             name = ""
-            if (i==0):
+            if i == 0:
                 name = "BCH"
-            elif i==1:
+            elif i == 1:
                 name = "HSE"
-            elif i==2:
+            elif i == 2:
                 name = "SHP"
-            elif i==3:
+            elif i == 3:
                 name = "HWY"
-            elif i==4:
+            elif i == 4:
                 name = "FAC"
-            elif i==5:
+            elif i == 5:
                 name = "MON"
-            elif i==6:
+            elif i == 6:
                 name = "PRK"
             subtotal = sum(building_type_scores[i])
-            subtotal_text = name + ": " + " + ".join("{0}".format(score) for score in building_type_scores[i])
+            subtotal_text = (
+                name
+                + ": "
+                + " + ".join("{0}".format(score) for score in building_type_scores[i])
+            )
             print(subtotal_text + " = " + str(subtotal))
             total_score += subtotal
-        i+=1
+        i += 1
 
     return total_score
 
 
 def crawl_parks(game_board, i, y, park_coords):
-    item_above, item_below, item_right, item_left = get_items_around(
-        game_board, i, y)
+    item_above, item_below, item_right, item_left = get_items_around(game_board, i, y)
     coords = (i, y)
     park_coords.append(coords)
 
-    if item_below == "PRK" and (i+1, y) not in park_coords:
-        park_coords = crawl_parks(game_board, i+1, y, park_coords)
+    if item_below == "PRK" and (i + 1, y) not in park_coords:
+        park_coords = crawl_parks(game_board, i + 1, y, park_coords)
 
-    if item_right == "PRK" and (i, y+1) not in park_coords:
-        park_coords = crawl_parks(game_board, i, y+1, park_coords)
+    if item_right == "PRK" and (i, y + 1) not in park_coords:
+        park_coords = crawl_parks(game_board, i, y + 1, park_coords)
 
-    if item_above == "PRK" and (i-1, y) not in park_coords:
-        park_coords = crawl_parks(game_board, i-1, y, park_coords)
+    if item_above == "PRK" and (i - 1, y) not in park_coords:
+        park_coords = crawl_parks(game_board, i - 1, y, park_coords)
 
-    if item_left == "PRK" and (i, y-1) not in park_coords:
-        park_coords = crawl_parks(game_board, i, y-1, park_coords)
+    if item_left == "PRK" and (i, y - 1) not in park_coords:
+        park_coords = crawl_parks(game_board, i, y - 1, park_coords)
 
     # Base case - item's surroundings are already crawled through or are not parks
     return park_coords
@@ -387,23 +404,23 @@ def crawl_parks(game_board, i, y, park_coords):
 
 def get_items_around(game_board, i, y):
     try:
-        if (i-1) >= 0:
-            item_above = game_board[i-1][y]
+        if (i - 1) >= 0:
+            item_above = game_board[i - 1][y]
         else:
             item_above = None
     except IndexError:
         item_above = None
     try:
-        item_below = game_board[i+1][y]
+        item_below = game_board[i + 1][y]
     except IndexError:
         item_below = None
     try:
-        item_right = game_board[i][y+1]
+        item_right = game_board[i][y + 1]
     except IndexError:
         item_right = None
     try:
-        if (y-1) >= 0:
-            item_left = game_board[i][y-1]
+        if (y - 1) >= 0:
+            item_left = game_board[i][y - 1]
         else:
             item_left = None
     except IndexError:
