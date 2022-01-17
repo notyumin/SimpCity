@@ -1,5 +1,6 @@
 from random import randint
 import pickle
+from re import sub
 from colorama import init
 
 init()
@@ -75,7 +76,7 @@ def game_menu(game_board, building_pool):
         elif option == 3:
             continue
         elif option == 4:
-            continue
+            calculate_score(game_board)
         elif option == 5:
             save_game(game_board, building_pool, "save.pickle")
         elif option == 0:
@@ -225,12 +226,12 @@ def calculate_score(game_board):
     monument_count = 0
     monument_corner_count = 0
 
-    BCH_score = 0
-    HSE_score = 0
-    SHP_score = 0
-    HWY_score = 0
-    PRK_score = 0
-    MON_score = 0
+    BCH_scores = []
+    HSE_scores = []
+    SHP_scores = []
+    HWY_scores = []
+    PRK_scores = []
+    MON_scores = []
 
     PRK_score_dict = {
         1: 1, 2: 3, 3: 8, 4: 16, 5: 22, 6: 23, 7: 24, 8: 25
@@ -248,41 +249,37 @@ def calculate_score(game_board):
             if curr_item == "BCH":
                 # Beaches get bonus points for being built in col A/D
                 if y == 0 or y == 3:
-                    BCH_score += 3
+                    BCH_scores.append(3)
                 else:
-                    BCH_score += 1
+                    BCH_scores.append(1)
 
             elif curr_item == "FAC":
                 # Factory score is calculated last, after getting total number of factories
                 factory_count += 1
 
             elif curr_item == "HSE":
-                item_above = game_board[i][y-1]
-                item_below = game_board[i][y+1]
-                item_right = game_board[i+1][y]
-                item_left = game_board[i-1][y]
+                item_above, item_below, item_right, item_left = get_items_around(game_board, i, y)
                 sub_total = 0
                 for item in [item_above, item_below, item_right, item_left]:
                     if item == "FAC":
-                        HSE_score += 1
+                        HSE_scores.append(1)
                         sub_total = 0
                         break
                     elif item == "HSE" or item == "SHP":
                         sub_total += 1
                     elif item == "BCH":
                         sub_total += 2
-                HSE_score += sub_total
+                HSE_scores.append(sub_total)
 
             elif curr_item == "SHP":
-                item_above, item_below, item_right, item_left = get_items_around(
-                    game_board, i, y)
+                item_above, item_below, item_right, item_left = get_items_around(game_board, i, y)
                 sub_total = 0
                 unique_buildings = ["BCH", "FAC", "HSE", "HWY"]
                 for item in [item_above, item_below, item_right, item_left]:
                     if item in unique_buildings:
                         sub_total += 1
                         unique_buildings.remove(item)
-                SHP_score += sub_total
+                SHP_scores.append(sub_total)
 
             elif curr_item == "HWY":
                 x = 0
@@ -303,11 +300,11 @@ def calculate_score(game_board):
                         length += 1
                     else:
                         break
-                HWY_score += length
+                HWY_scores.append(length)
 
             elif curr_item == "PRK":
                 current_park = crawl_parks(game_board, i, y, [])
-                PRK_score += PRK_score_dict[min(len(current_park), 8)]
+                PRK_scores.append(PRK_score_dict[min(len(current_park), 8)])
                 # Add park to coordinate blacklist - don't need to traverse again
                 coordinate_blacklist.extend(current_park)
 
@@ -325,20 +322,44 @@ def calculate_score(game_board):
                 # For an item to  be in a corner, exactly 2 of the checks must eval to true
                 if corner_checks.count(True) == 2:
                     monument_corner_count += 1
-                    MON_score += 2
+                    MON_scores.append(2)
                 else:
-                    MON_score += 1
+                    MON_scores.append(1)
 
     # FAC scores 1pt/FAC up to  a maximum of 4pts/FAC
-    FAC_score = min(factory_count, 4) * factory_count
+    FAC_scores = [min(factory_count, 4) for i in range(factory_count)]
 
     # MON
     if (monument_corner_count >= 3):
         # Override monument score
-        MON_score = 4 * monument_count
+        MON_scores = [4 for i in range(monument_count)]
 
-    total_score = BCH_score + HSE_score + SHP_score + \
-        HWY_score + FAC_score + MON_score + PRK_score
+    total_score = 0
+    i =  0
+    building_type_scores = [BCH_scores, HSE_scores, SHP_scores, HWY_scores, FAC_scores, MON_scores, PRK_scores]
+    while i < len(building_type_scores):
+        if (len(building_type_scores[i]) != 0):
+            name = ""
+            if (i==0):
+                name = "BCH"
+            elif i==1:
+                name = "HSE"
+            elif i==2:
+                name = "SHP"
+            elif i==3:
+                name = "HWY"
+            elif i==4:
+                name = "FAC"
+            elif i==5:
+                name = "MON"
+            elif i==6:
+                name = "PRK"
+            subtotal = sum(building_type_scores[i])
+            subtotal_text = name + ": " + " + ".join("{0}".format(score) for score in building_type_scores[i])
+            print(subtotal_text + " = " + str(subtotal))
+            total_score += subtotal
+        i+=1
+
     return total_score
 
 
