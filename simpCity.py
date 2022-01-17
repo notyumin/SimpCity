@@ -220,8 +220,126 @@ def main():
             exit()
 
 
-def calculate_score(board):
-    return
+def calculate_score(game_board):
+    factory_count = 0
+    monument_count = 0
+    monument_corner_count = 0
+
+    BCH_score = 0
+    HSE_score = 0
+    SHP_score = 0
+    HWY_score = 0
+    PRK_score = 0
+    MON_score = 0
+
+    PRK_score_dict = {
+        1: 1, 2: 3, 3: 8, 4: 16, 5: 22, 6: 23, 7: 24, 8: 25
+    }
+
+    coordinate_blacklist = []
+
+    for i in range(0, len(game_board)):
+        for y in range(0, len(game_board)):
+            if ((i, y) in coordinate_blacklist):
+                # Skip coord
+                continue
+
+            curr_item = game_board[i][y]
+            if curr_item == "BCH":
+                # Beaches get bonus points for being built in col A/D
+                if y == 0 or y == 3:
+                    BCH_score += 3
+                else:
+                    BCH_score += 1
+
+            elif curr_item == "FAC":
+                # Factory score is calculated last, after getting total number of factories
+                factory_count += 1
+
+            elif curr_item == "HSE":
+                item_above = game_board[i][y-1]
+                item_below = game_board[i][y+1]
+                item_right = game_board[i+1][y]
+                item_left = game_board[i-1][y]
+                sub_total = 0
+                for item in [item_above, item_below, item_right, item_left]:
+                    if item == "FAC":
+                        HSE_score += 1
+                        sub_total = 0
+                        break
+                    elif item == "HSE" or item == "SHP":
+                        sub_total += 1
+                    elif item == "BCH":
+                        sub_total += 2
+                HSE_score += sub_total
+
+            elif curr_item == "SHP":
+                item_above, item_below, item_right, item_left = get_items_around(
+                    game_board, i, y)
+                sub_total = 0
+                unique_buildings = ["BCH", "FAC", "HSE", "HWY"]
+                for item in [item_above, item_below, item_right, item_left]:
+                    if item in unique_buildings:
+                        sub_total += 1
+                        unique_buildings.remove(item)
+                SHP_score += sub_total
+
+            elif curr_item == "HWY":
+                x = 0
+                # Each individual highway gets scored based on how long the highway is
+                length = 1
+                while True:
+                    item_right = get_items_around(game_board, i, y+x)[2]
+                    x += 1
+                    if item_right == "HWY":
+                        length += 1
+                    else:
+                        break
+                x = 0
+                while True:
+                    item_left = get_items_around(game_board, i, y-x)[3]
+                    x += 1
+                    if item_left == "HWY":
+                        length += 1
+                    else:
+                        break
+                HWY_score += length
+
+            elif curr_item == "PRK":
+                current_park = crawl_parks(game_board, i, y, [])
+                PRK_score += PRK_score_dict[min(len(current_park), 8)]
+                # Add park to coordinate blacklist - don't need to traverse again
+                coordinate_blacklist.extend(current_park)
+
+            elif curr_item == "MON":
+                monument_count += 1
+
+                # bools to check if item is in corner
+                is_bottom_corner = i+1 > (len(game_board)-1)
+                is_right_corner = y+1 > (len(game_board[0])-1)
+                is_top_corner = i-1 < 0
+                is_left_corner = y-1 < 0
+                corner_checks = [is_right_corner,
+                                 is_bottom_corner, is_left_corner, is_top_corner]
+
+                # For an item to  be in a corner, exactly 2 of the checks must eval to true
+                if corner_checks.count(True) == 2:
+                    monument_corner_count += 1
+                    MON_score += 2
+                else:
+                    MON_score += 1
+
+    # FAC scores 1pt/FAC up to  a maximum of 4pts/FAC
+    FAC_score = min(factory_count, 4) * factory_count
+
+    # MON
+    if (monument_corner_count >= 3):
+        # Override monument score
+        MON_score = 4 * monument_count
+
+    total_score = BCH_score + HSE_score + SHP_score + \
+        HWY_score + FAC_score + MON_score + PRK_score
+    return total_score
 
 
 def crawl_parks(game_board, i, y, park_coords):
