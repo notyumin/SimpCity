@@ -154,3 +154,70 @@ def test_build_places_building_in_board(board, column, row, building, expected_b
 def test_build_throws_error_for_invalid_placement(board, column, row, building):
     with pytest.raises(Exception) as e_info:
         new_board = build(board, column, row, building)
+
+
+@pytest.mark.parametrize("board, expected_score", [
+    (
+        [
+            ["HWY", "HWY", "HWY", "FAC"],
+            ["BCH", "HSE", "HSE", "SHP"],
+            ["BCH", "SHP", "HSE", "FAC"],
+            ["HWY", "FAC", "HWY", "HWY"]
+        ],
+        42
+    ),
+    (
+        [
+            ["", "HWY", "", ""],
+            ["", "SHP", "HSE", "BCH"],
+            ["", "HSE", "HSE", "BCH"],
+            ["", "", "", ""]
+        ],
+        19
+    ),
+    (
+        [
+            ["", "HSE", "FAC", "BCH"],
+            ["", "FAC", "BCH", ""],
+            ["", "SHP", "", "BCH"],
+            ["HWY", "", "", ""]
+        ],
+        14
+    ),
+    (
+        [
+            ["PRK", "PRK", "", "", "MON"],
+            ["PRK", "PRK", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "MON", "", "MON", ""],
+            ["MON", "", "", "", "MON"]
+        ],
+        36
+    ),
+    (
+        [
+            ["PRK", "PRK", "", "", "PRK"],
+            ["PRK", "PRK", "", "", "PRK"],
+            ["", "", "PRK", "", "PRK"],
+            ["", "MON", "", "MON", ""],
+            ["MON", "", "", "", "MON"]
+        ],
+        31
+    ),
+    (
+        [
+            ["PRK", "PRK", "PRK", "", ""],
+            ["PRK", "PRK", "", "", ""],
+            ["PRK", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""]
+        ],
+        23
+    ),
+])
+def test_calculate_score_returns_valid_score(board, expected_score):
+    # Act
+    calculated_score = calculate_score(board)
+
+    # Assert
+    assert calculated_score == expected_score

@@ -220,5 +220,9 @@ def main():
             exit()
 
 
+def calculate_score(board):
+    return
+
+
 if __name__ == "__main__":
     main()
