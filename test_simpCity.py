@@ -79,7 +79,6 @@ def test_save_game(board, pool, expectedBoard, expectedPool, fs):
     assert sBoard[1] == expectedPool
 
 
-
 @pytest.mark.parametrize(
     "board,column,row,building,expected_board",
     [
