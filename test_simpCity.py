@@ -221,3 +221,52 @@ def test_calculate_score_returns_valid_score(board, expected_score):
 
     # Assert
     assert calculated_score == expected_score
+
+
+@pytest.mark.parametrize("board, expected_park_coords", [
+    (
+        [
+            ["PRK", "PRK", "PRK", "PRK"],
+            ["PRK", "", "", "PRK"],
+            ["PRK", "", "", "PRK"],
+            ["PRK", "PRK", "PRK", "PRK"]
+        ],
+        [(0, 0), (1, 0), (2, 0), (3, 0), (3, 1), (3, 2),
+         (3, 3), (2, 3), (1, 3), (0, 3), (0, 2), (0, 1)]
+    ),
+    (
+        [
+            ["PRK", "PRK", "", ""],
+            ["PRK", "PRK", "", ""],
+            ["", "", "", ""],
+            ["", "", "", ""]
+        ],
+        [(0, 0), (1, 0), (1, 1), (0, 1)]
+    ),
+    (
+        [
+            ["PRK", "PRK", "PRK", "PRK", "PRK"],
+            ["PRK",    "", "PRK",    "", "PRK"],
+            ["PRK",    "", "PRK",    "", "PRK"],
+            ["PRK", "PRK", "PRK", "PRK", "PRK"]
+        ],
+        [(0, 0), (1, 0), (2, 0), (3, 0), (3, 1), (3, 2),
+         (3, 3), (3, 4), (2, 4), (1, 4), (0, 4), (0, 3), (0, 2), (1, 2), (2, 2), (0, 1)]
+    ),
+    (
+        [
+            ["PRK", "PRK", "PRK", "PRK"],
+            ["", "PRK",   "",     ""],
+            ["", "PRK",   "",     ""],
+            ["PRK", "PRK", "PRK", "PRK"]
+        ],
+        [(0, 0), (0, 1), (0, 2), (0, 3), (1, 1),
+         (2, 1), (3, 0), (3, 1), (3, 2), (3, 3)]
+    ),
+])
+def test_crawl_parks_obtains_coords_list_of_horizontally_and_vertically_connected_parks(board, expected_park_coords):
+    # Act
+    park_coordinates = crawl_parks(board, 0, 0, [])
+
+    # Assert using sets because order of list does not matter
+    assert set(park_coordinates) == set(expected_park_coords)

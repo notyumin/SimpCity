@@ -224,5 +224,9 @@ def calculate_score(board):
     return
 
 
+def crawl_parks(game_board, i, y, park_coords):
+    return
+
+
 if __name__ == "__main__":
     main()
