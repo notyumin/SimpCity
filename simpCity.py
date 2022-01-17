@@ -225,7 +225,51 @@ def calculate_score(board):
 
 
 def crawl_parks(game_board, i, y, park_coords):
-    return
+    item_above, item_below, item_right, item_left = get_items_around(
+        game_board, i, y)
+    coords = (i, y)
+    park_coords.append(coords)
+
+    if item_below == "PRK" and (i+1, y) not in park_coords:
+        park_coords = crawl_parks(game_board, i+1, y, park_coords)
+
+    if item_right == "PRK" and (i, y+1) not in park_coords:
+        park_coords = crawl_parks(game_board, i, y+1, park_coords)
+
+    if item_above == "PRK" and (i-1, y) not in park_coords:
+        park_coords = crawl_parks(game_board, i-1, y, park_coords)
+
+    if item_left == "PRK" and (i, y-1) not in park_coords:
+        park_coords = crawl_parks(game_board, i, y-1, park_coords)
+
+    # Base case - item's surroundings are already crawled through or are not parks
+    return park_coords
+
+
+def get_items_around(game_board, i, y):
+    try:
+        if (i-1) >= 0:
+            item_above = game_board[i-1][y]
+        else:
+            item_above = None
+    except IndexError:
+        item_above = None
+    try:
+        item_below = game_board[i+1][y]
+    except IndexError:
+        item_below = None
+    try:
+        item_right = game_board[i][y+1]
+    except IndexError:
+        item_right = None
+    try:
+        if (y-1) >= 0:
+            item_left = game_board[i][y-1]
+        else:
+            item_left = None
+    except IndexError:
+        item_left = None
+    return item_above, item_below, item_right, item_left
 
 
 if __name__ == "__main__":
