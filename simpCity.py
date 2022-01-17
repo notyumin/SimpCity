@@ -1,9 +1,8 @@
 from random import randint
 import pickle
+from colorama import init
 
-# initial commit
-print("Welcome, mayor of Simp City")
-print("----------------------------")
+init()
 
 
 def init_game():
@@ -20,8 +19,6 @@ def init_game():
 
 
 # UI for in-game menu
-
-
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
@@ -59,16 +56,28 @@ def game_menu(game_board, building_pool):
             print("\033[91m{}\033[00m".format("Invalid option!"))
             continue
 
-        if option == 1:
-            continue
-        elif option == 2:
-            continue
+        if option == 1 or option == 2:
+            while True:
+                column = input("Column :")
+                row = input("Row :")
+                if option == 1:
+                    to_be_built = buildings[0]
+                elif option == 2:
+                    to_be_built = buildings[1]
+                try:
+                    game_board = build(game_board, column, row, to_be_built)
+                except ValueError as error:
+                    print("\033[91m{}\033[00m".format(error))
+                    # Start loop from top & make user input again
+                    continue
+                building_pool[to_be_built] -= 1
+                break
         elif option == 3:
             continue
         elif option == 4:
             continue
         elif option == 5:
-            continue
+            save_game(game_board, building_pool, "save.pickle")
         elif option == 0:
             print("Returning to main menu...")
             return
@@ -85,8 +94,6 @@ def load_game(filename):
 
 
 # Function to save game data
-
-
 def save_game(board, pool, filename):
     pickle_out = open(filename, "wb")
     pickle.dump([board, pool], pickle_out)
@@ -129,13 +136,6 @@ def randomise_building(building_pool):
 
 
 def print_board(board):
-    board = [
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-    ]
     header = f"    "
     # Get column length of board and write header
     for i in range(len(board[0])):
@@ -154,6 +154,33 @@ def print_board(board):
         row_count += 1
     print(col_separator)
     return
+
+
+def build(board, column, row, building):
+    # Obtains index from  letter by getting unicode value of letter
+    try:
+        column_index = ord(column.lower()) - 97
+    except:
+        raise ValueError("Invalid column value!")
+    else:
+        if column_index < 0 or column_index > 25:
+            raise ValueError("Invalid column value!")
+
+    try:
+        row_index = int(row) - 1
+    except ValueError as error:
+        raise
+    else:
+        if row_index > len(board[0]) or column_index > len(board):
+            raise ValueError("Invalid row/column value!")
+
+    # Set building in board
+    if board[row_index][column_index] == "":
+        board[row_index][column_index] = building
+    else:
+        raise ValueError("Invalid placement - block not empty")
+
+    return board
 
 
 def main():
@@ -180,9 +207,7 @@ def main():
             continue
 
         if option == 1:
-            if game_board == None or building_pool == None:
-                # Get blank game board and default building pool
-                game_board, building_pool = init_game()
+            game_board, building_pool = init_game()
             # Start game menu
             game_menu(game_board, building_pool)
 
