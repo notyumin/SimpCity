@@ -65,7 +65,6 @@ def test_save_game(board, pool, expectedBoard, expectedPool, fs):
     assert sBoard[1] == expectedPool
 
 
-
 # building chosen city size
 @pytest.mark.parametrize(
     "size, expectedBoard",
@@ -144,6 +143,7 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
     board, pool = set_game(size, buildings)
     assert pool == expectedPool
     assert board == expectedBoard
+
 
 @pytest.mark.parametrize(
     "board,column,row,building,expected_board",

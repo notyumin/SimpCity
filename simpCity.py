@@ -291,6 +291,7 @@ def set_game(size, buildings):
         building_pool = build_pool(buildings, size)
         return game_board, building_pool
 
+
 def build(board, column, row, building):
     # Obtains index from  letter by getting unicode value of letter
     try:
