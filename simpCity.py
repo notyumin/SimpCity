@@ -118,8 +118,9 @@ def randomise_building(building_pool):
                     break
     return [building_1, building_2]
 
+
 def print_board(board):
-    bList=[]
+    bList = []
     header = f"    "
     # Get column length of board and write header
     for i in range(len(board[0])):
@@ -139,24 +140,27 @@ def print_board(board):
     bList.append(col_separator)
     return bList
 
+
 def print_remaining_buildings(building_pool):
     data = []
-    pList=[]
+    pList = []
     for pair in building_pool.items():
-        data.append(pair) 
-    list=tabulate(data, headers=["Building", "Remaining"])
+        data.append(pair)
+    list = tabulate(data, headers=["Building", "Remaining"])
     for line in list.splitlines():
         pList.append(line)
     return pList
 
+
 def print_game(game_board, building_pool):
-    a= print_board(game_board)
-    b= print_remaining_buildings(building_pool)
-    if len(a)>len(b):
-        for i in range(len(a)-len(b)):
-            b.append('')
+    a = print_board(game_board)
+    b = print_remaining_buildings(building_pool)
+    if len(a) > len(b):
+        for i in range(len(a) - len(b)):
+            b.append("")
         res = "\n".join("{} {:>35}".format(x, y) for x, y in zip(a, b))
-        print (res+'\n')
+        print(res + "\n")
+
 
 # UI to choose city size/building pool
 def option_menu():
