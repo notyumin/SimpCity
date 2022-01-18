@@ -1,6 +1,8 @@
 from random import randint
 import pickle
 from colorama import init
+from tabulate import tabulate
+
 
 # UI for in-game menu
 def game_menu(game_board, building_pool):
@@ -139,6 +141,11 @@ def print_board(board):
     print(col_separator)
     return
 
+def print_remaining_buildings(building_pool):
+    data = []
+    for pair in building_pool.items():
+        data.append(pair) 
+    return tabulate(data, headers=["Building", "Remaining"])
 
 # UI to choose city size/building pool
 def option_menu():
