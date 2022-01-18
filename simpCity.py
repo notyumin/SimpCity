@@ -3,22 +3,6 @@ import pickle
 from re import sub
 from colorama import init
 
-init()
-
-
-def init_game():
-    game_board = [
-        # e.g. ['SHP','FAC','BCH','HWY']
-        ["", "", "", ""],
-        ["", "", "", ""],
-        ["", "", "", ""],
-        ["", "", "", ""],
-    ]
-    # Building name:count of buildings
-    building_pool = {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8}
-    return game_board, building_pool
-
-
 # UI for in-game menu
 def game_menu(game_board, building_pool):
     turn_counter = 1
@@ -155,6 +139,158 @@ def print_board(board):
         row_count += 1
     print(col_separator)
     return
+
+
+# UI to choose city size/building pool
+def option_menu():
+    buildings = None
+    size = None
+    while True:
+        print("\n1. Choose Building Pool")
+        print("2. Choose City Size")
+        print("\n0. Back to Main Menu")
+
+        option = int(input("Your choice? "))
+        try:
+            if option != 1 and option != 2 and option != 0:
+                raise ValueError
+        except ValueError:
+            # print red warning using ANSI escape codes
+            print("\033[91m{}\033[00m".format("Invalid option!"))
+            continue
+
+        if option == 1:
+            buildings = choose_building()
+
+        elif option == 2:
+            size = choose_citysize()
+
+        elif option == 0:
+            return size, buildings
+
+
+# UI to choose citysize menu
+def choose_citysize():
+    print("\nCity Size available in the SimpCity: ")
+    print("\n1. 4x4")
+    print("2. 5x5")
+    print("3. 6x6")
+    print("4. 7x7")
+    print("\n0. Back to Options Menu")
+
+    option = int(input("Your choice? "))
+    try:
+        if option > 4 or option < 0:
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid option!"))
+        return
+    if option == 0:
+        return
+    else:
+        size = option + 3
+        return size
+
+
+# UI to choose building pool
+def choose_building():
+    print("\nBuildings in the SimpCity: ")
+    print("\nHouse (HSE)")
+    print("Factory (FAC)")
+    print("Shop (SHP)")
+    print("Highway (HWY)")
+    print("Beach (BCH)")
+    print("Park (PRK)")
+    print("Monument (MON)")
+    print(
+        "\nChoose 5 buildings from the list. Separate each building's abbreviations with a comma and space!\nAbbreviations should be all CAPS"
+    )
+    print("eg: HSE, FAC, SHP, HWY, BCH")
+    buildings = input("\nChoosen Building Pool:").split(", ")
+
+    # input not 5 buildings
+    try:
+        if len(buildings) != 5:
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid option! Should be 5 buildings"))
+        return
+
+    # input not in building list
+    try:
+        for i in buildings:
+            if i not in ["HSE", "FAC", "SHP", "HWY", "BCH", "PRK", "MON"]:
+                raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid Building!"))
+        return
+
+    # input duplicate buildings
+    try:
+        if len(buildings) != len(set(buildings)):
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Duplicate Buildings!"))
+        return
+    return buildings
+
+
+# build chosen city size
+def build_grid(size):
+    try:
+        if size > 7 or size < 4:
+            raise ValueError
+    except ValueError:
+        # print red warning using ANSI escape codes
+        print("\033[91m{}\033[00m".format("Invalid dimension!"))
+        return
+    given_value = ""
+    column = []
+    row = []
+    column.extend([given_value for i in range(size)])
+    row.extend([column for i in range(size)])
+    return row
+
+
+# build building pool
+def build_pool(buildings, size):
+    if size is None:
+        size = 4
+    building_pool = {}
+    num = int(((size * size) / 16) * 8)
+    for i in buildings:
+        building_pool[i] = num
+    return building_pool
+
+
+# finalize user's choice
+def set_game(size, buildings):
+    if buildings is None and size is None:
+        size = 4
+        default_pool = ["HSE", "FAC", "SHP", "HWY", "BCH"]
+        game_board = build_grid(size)
+        building_pool = build_pool(default_pool, size)
+        return game_board, building_pool
+    elif size is None:
+        size = 4
+        game_board = build_grid(size)
+        building_pool = build_pool(buildings, size)
+        return game_board, building_pool
+
+    elif buildings is None:
+        game_board = build_grid(size)
+        default_pool = ["HSE", "FAC", "SHP", "HWY", "BCH"]
+        building_pool = build_pool(default_pool, size)
+        return game_board, building_pool
+
+    else:
+        game_board = build_grid(size)
+        building_pool = build_pool(buildings, size)
+        return game_board, building_pool
 
 
 def build(board, column, row, building):
@@ -410,14 +546,15 @@ def get_items_around(game_board, i, y):
 
 
 def main():
-    game_board = None
-    building_pool = None
+    size = None
+    buildings = None
 
     while True:
         print("\nWelcome, mayor of Simp City!")
         print("----------------------------")
         print("\n1. Start new game")
         print("2. Load new game")
+        print("3. Options")
         print("\n0. Exit")
 
         option = input("Your choice? ")
@@ -425,7 +562,7 @@ def main():
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if option != 1 and option != 2 and option != 0:
+            if option != 1 and option != 2 and option != 3 and option != 0:
                 raise ValueError
         except ValueError:
             # print red warning using ANSI escape codes
@@ -433,13 +570,16 @@ def main():
             continue
 
         if option == 1:
-            game_board, building_pool = init_game()
+            game_board, building_pool = set_game(size, buildings)
             # Start game menu
             game_menu(game_board, building_pool)
 
         elif option == 2:
             game_board, building_pool = load_game("save.pickle")
             game_menu(game_board, building_pool)
+
+        elif option == 3:
+            size, buildings = option_menu()
 
         elif option == 0:
             print("Bye!")
