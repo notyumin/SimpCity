@@ -20,28 +20,21 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Format using black
-        uses: rickstaa/action-black@v1
-        id: action_black
-        with:
-          black_args: "."
-      
-      - name: Push formatted changes
-        if: steps.action_black.outputs.is_formatted == 'true'
-        run: |
-            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git config --local user.name "github-actions[bot]"
-            git commit -am "Formatted code"
-            git push origin HEAD:${{ github.head_ref }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pytest pytest-cov colorama pyfakefs
-      - name: Config git
-        run: | 
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git pull origin ${{ github.head_ref }} --rebase
+      - name: Label PR size
+        uses: coverwallet/pr-labeler@v1.2.1
+        with:
+          xs_max_size: "10"
+          s_max_size: "100"
+          m_max_size: "500"
+          l_max_size: "1000"
+          exclude_files: ".txt"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Begin Pytest
         run: |
           pytest --cov -v --junitxml=report.xml
@@ -61,3 +54,17 @@ jobs:
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           files: report.xml
+
+      - name: Format using black
+        uses: rickstaa/action-black@v1
+        id: action_black
+        with:
+          black_args: "."
+      
+      - name: Push formatted changes
+        if: steps.action_black.outputs.is_formatted == 'true'
+        run: |
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git commit -am "Formatted code"
+            git push origin HEAD:${{ github.head_ref }}
