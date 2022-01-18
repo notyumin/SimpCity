@@ -333,7 +333,7 @@ def calculate_score(game_board):
                     MON_scores.append(1)
 
     # FAC scores 1pt/FAC up to  a maximum of 4pts/FAC.
-    FAC_scores = [min(factory_count, 4) if i<4 else 1 for i in range(factory_count)]
+    FAC_scores = [min(factory_count, 4) if i < 4 else 1 for i in range(factory_count)]
 
     # MON
     if monument_corner_count >= 3:
@@ -352,7 +352,9 @@ def calculate_score(game_board):
         PRK_scores,
     ]
     while i < len(building_type_scores):
-        building_type_scores[i] = [score for score in building_type_scores[i] if score!=0]
+        building_type_scores[i] = [
+            score for score in building_type_scores[i] if score != 0
+        ]
         if len(building_type_scores[i]) != 0:
             name = ""
             if i == 0:
