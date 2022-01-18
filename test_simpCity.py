@@ -216,6 +216,16 @@ def test_build_throws_error_for_invalid_placement(board, column, row, building):
             ],
             23,
         ),
+        (
+            [
+                ["FAC", "FAC", "FAC", "", ""],
+                ["FAC", "FAC", "", "", ""],
+                ["FAC", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+            ],
+            18,
+        ),
     ],
 )
 def test_calculate_score_returns_valid_score(board, expected_score):

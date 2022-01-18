@@ -276,7 +276,7 @@ def calculate_score(game_board):
                     game_board, i, y
                 )
                 sub_total = 0
-                unique_buildings = ["BCH", "FAC", "HSE", "HWY"]
+                unique_buildings = ["BCH", "FAC", "HSE", "HWY", "MON", "PRK"]
                 for item in [item_above, item_below, item_right, item_left]:
                     if item in unique_buildings:
                         sub_total += 1
@@ -332,8 +332,8 @@ def calculate_score(game_board):
                 else:
                     MON_scores.append(1)
 
-    # FAC scores 1pt/FAC up to  a maximum of 4pts/FAC
-    FAC_scores = [min(factory_count, 4) for i in range(factory_count)]
+    # FAC scores 1pt/FAC up to  a maximum of 4pts/FAC.
+    FAC_scores = [min(factory_count, 4) if i<4 else 1 for i in range(factory_count)]
 
     # MON
     if monument_corner_count >= 3:
@@ -352,6 +352,7 @@ def calculate_score(game_board):
         PRK_scores,
     ]
     while i < len(building_type_scores):
+        building_type_scores[i] = [score for score in building_type_scores[i] if score!=0]
         if len(building_type_scores[i]) != 0:
             name = ""
             if i == 0:
@@ -377,7 +378,7 @@ def calculate_score(game_board):
             print(subtotal_text + " = " + str(subtotal))
             total_score += subtotal
         i += 1
-
+    print("\nTotal score: " + str(total_score))
     return total_score
 
 
