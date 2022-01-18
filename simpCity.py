@@ -183,6 +183,7 @@ def build(board, column, row, building):
 
     return board
 
+
 def calculate_score(game_board):
     factory_count = 0
     monument_count = 0
@@ -354,6 +355,7 @@ def calculate_score(game_board):
     print("\nTotal score: " + str(total_score))
     return total_score
 
+
 # Obtains coordinates of any chunk of vertically & horizontally connected PRK items
 def crawl_parks(game_board, i, y, park_coords):
     item_above, item_below, item_right, item_left = get_items_around(game_board, i, y)
@@ -442,6 +444,7 @@ def main():
         elif option == 0:
             print("Bye!")
             exit()
+
 
 if __name__ == "__main__":
     main()
