@@ -247,8 +247,8 @@ def build_grid(size):
         # print red warning using ANSI escape codes
         print("\033[91m{}\033[00m".format("Invalid dimension!"))
         return
-    board = [["" for a in range (size)] for b in range(size)]
-    return board 
+    board = [["" for a in range(size)] for b in range(size)]
+    return board
 
 
 # build building pool
