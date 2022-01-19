@@ -28,6 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pytest-cov colorama pyfakefs
       - name: Label PR size
+        if: github.event_name == 'pull_request'
         uses: coverwallet/pr-labeler@v1.2.1
         with:
           xs_max_size: "10"
