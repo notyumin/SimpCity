@@ -37,7 +37,7 @@ jobs:
 
       - name: Begin Pytest
         run: |
-          pytest ./test_simpCity.py --cov -v --junitxml=report.xml
+          pytest --cov -v --junitxml=report.xml --cov-report=xml
       - if: ${{failure()}}
         name: Create Issues
         uses: nashmaniac/create-issue-action@v1.1
@@ -51,7 +51,7 @@ jobs:
       - name: Code Coverage
         uses: codecov/codecov-action@v2
         with:
-          files: ./report.xml
+          files: ./coverage.xml
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.24
