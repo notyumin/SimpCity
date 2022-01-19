@@ -23,7 +23,6 @@ def game_menu(game_board, building_pool):
         print("Your choice?")
         option = input()
 
-        turn_counter += 1
         # Ensure inputted option is valid
         try:
             option = int(option)
@@ -55,9 +54,10 @@ def game_menu(game_board, building_pool):
                     # Start loop from top & make user input again
                     continue
                 building_pool[to_be_built] -= 1
+                turn_counter += 1
                 break
         elif option == 3:
-            continue
+            print_remaining_buildings(building_pool, True)
         elif option == 4:
             continue
         elif option == 5:
@@ -141,20 +141,23 @@ def print_board(board):
     return bList
 
 
-def print_remaining_buildings(building_pool):
+def print_remaining_buildings(building_pool, option):
     data = []
     pList = []
     for pair in building_pool.items():
         data.append(pair)
     list = tabulate(data, headers=["Building", "Remaining"])
-    for line in list.splitlines():
-        pList.append(line)
-    return pList
+    if option is True: 
+        print(list)
+    else: 
+        for line in list.splitlines():
+            pList.append(line)
+        return pList
 
 
 def print_game(game_board, building_pool):
     a = print_board(game_board)
-    b = print_remaining_buildings(building_pool)
+    b = print_remaining_buildings(building_pool, False)
     if len(a) > len(b):
         for i in range(len(a) - len(b)):
             b.append("")
