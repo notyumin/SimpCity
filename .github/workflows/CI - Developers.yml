@@ -1,6 +1,9 @@
 name: CI for Developers
 
 on:
+  push:
+      branches:
+        - development
   pull_request:
     branches: [development]
 
