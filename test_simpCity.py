@@ -220,3 +220,33 @@ def test_build_places_building_in_board(board, column, row, building, expected_b
 def test_build_throws_error_for_invalid_placement(board, column, row, building):
     with pytest.raises(Exception) as e_info:
         new_board = build(board, column, row, building)
+
+# isFull??
+@pytest.mark.parametrize(
+    "board, expectedReturn",
+    [
+        (
+            [
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+            ],
+            False
+        ),
+        (
+            [
+                ["A", "A", "A", "A", "A"],
+                ["A", "A", "A", "A", "A"],
+                ["A", "A", "A", "A", "A"],
+                ["A", "A", "A", "A", "A"],
+                ["A", "A", "A", "A", "A"],
+            ],
+            True
+        ),
+    ],
+)
+def test_isFull(board, expectedReturn):
+    reply = isFull(board)
+    assert reply == expectedReturn
