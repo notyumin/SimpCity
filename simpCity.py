@@ -2,6 +2,7 @@ from random import randint
 import pickle
 from re import sub
 from colorama import init
+from tabulate import tabulate
 
 # UI for in-game menu
 def game_menu(game_board, building_pool):
@@ -9,8 +10,7 @@ def game_menu(game_board, building_pool):
     while True:
         # Print turn and game   board
         print("\nTurn " + str(turn_counter))
-        print_board(game_board)
-
+        print_game(game_board, building_pool)
         # Get randomised building
         buildings = randomise_building(building_pool)
 
@@ -121,24 +121,46 @@ def randomise_building(building_pool):
 
 
 def print_board(board):
+    bList = []
     header = f"    "
     # Get column length of board and write header
     for i in range(len(board[0])):
         header += f"{chr(65+i):<6}"
-    print(header)
+    bList.append(header)
 
     row_count = 1
     for row in board:
         col_separator = " +" + (len(board[0]) * "-----+")
-        print(col_separator)
+        bList.append(col_separator)
         #  Prints out contents of row center aligned and with a width of 5
         row_content = f"{row_count}|"
         for col in row:
             row_content += f"{col:^5}|"
-        print(row_content)
+        bList.append(row_content)
         row_count += 1
-    print(col_separator)
-    return
+    bList.append(col_separator)
+    return bList
+
+
+def print_remaining_buildings(building_pool):
+    data = []
+    pList = []
+    for pair in building_pool.items():
+        data.append(pair)
+    list = tabulate(data, headers=["Building", "Remaining"])
+    for line in list.splitlines():
+        pList.append(line)
+    return pList
+
+
+def print_game(game_board, building_pool):
+    a = print_board(game_board)
+    b = print_remaining_buildings(building_pool)
+    if len(a) > len(b):
+        for i in range(len(a) - len(b)):
+            b.append("")
+        res = "\n".join("{} {:>35}".format(x, y) for x, y in zip(a, b))
+        print(res + "\n")
 
 
 # UI to choose city size/building pool
