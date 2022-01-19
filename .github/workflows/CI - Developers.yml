@@ -37,7 +37,7 @@ jobs:
 
       - name: Begin Pytest
         run: |
-          pytest --cov -v --junitxml=report.xml
+          pytest ./test_simpCity.py --cov -v --junitxml=report.xml
       - if: ${{failure()}}
         name: Create Issues
         uses: nashmaniac/create-issue-action@v1.1
@@ -47,6 +47,11 @@ jobs:
           assignees: ${{github.actor}}
           labels: workflow-failed
           body: Workflow failed for commit ${{github.sha}} @ ${{github.ref}}
+
+      - name: Code Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./report.xml
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.24
