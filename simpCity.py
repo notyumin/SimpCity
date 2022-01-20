@@ -13,7 +13,7 @@ def game_menu(game_board, building_pool):
         if reply is True:
             endgame(game_board, building_pool)
             break
-        
+
         # Print turn and game board
         print("\nTurn " + str(turn_counter))
         print_game(game_board, building_pool)
@@ -362,7 +362,7 @@ def endgame(board, pool):
     score = calculate_score(board)
     filename = "high" + str(len(board)) + ".pickle"
     high, ignore = load_file(filename)
-    p=0
+    p = 0
     while p in range(len(high)):
         if score > high[p][1]:
             position = p + 1
@@ -374,10 +374,10 @@ def endgame(board, pool):
             name = str(input("Please enter your name (max 20 chars): "))
             high.append((name, score))
             high = sorted(high, key=itemgetter(1), reverse=True)[:10]
-            save_file(high,None,filename)
+            save_file(high, None, filename)
             print_highscores(high)
             return
-        p+=1
+        p += 1
     return
 
 
@@ -894,8 +894,8 @@ def main():
         print("\n0. Exit")
         option = input("Your choice? ")
         # if wanna edit pickle, it is here
-        #score = [("Never", 56), ("Gonna", 53), ("Give", 52), ("You", 52), ("Up", 51), ("Never", 51), ("Gonna", 50), ("Let", 49), ("You", 49), ("Down", 48)]
-        #save_file(score,None,"high4.pickle")
+        # score = [("Never", 56), ("Gonna", 53), ("Give", 52), ("You", 52), ("Up", 51), ("Never", 51), ("Gonna", 50), ("Let", 49), ("You", 49), ("Down", 48)]
+        # save_file(score,None,"high4.pickle")
 
         # Ensure inputted option is valid
         try:
