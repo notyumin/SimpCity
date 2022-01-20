@@ -39,7 +39,7 @@ def test_randomise_buildings_returns_valid_building(pool, expected_buildings):
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
             None,
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
-        )
+        ),
     ],
 )
 def test_load_file(fs, board, pool, expectedBoard, expectedPool):
@@ -66,7 +66,7 @@ def test_load_file(fs, board, pool, expectedBoard, expectedPool):
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
             None,
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
-        )
+        ),
     ],
 )
 def test_save_file(board, pool, expectedBoard, expectedPool, fs):
@@ -233,6 +233,7 @@ def test_build_throws_error_for_invalid_placement(board, column, row, building):
     with pytest.raises(Exception) as e_info:
         new_board = build(board, column, row, building)
 
+
 # isFull??
 @pytest.mark.parametrize(
     "board, expectedReturn",
@@ -245,7 +246,7 @@ def test_build_throws_error_for_invalid_placement(board, column, row, building):
                 ["", "", "", "", ""],
                 ["", "", "", "", ""],
             ],
-            False
+            False,
         ),
         (
             [
@@ -255,7 +256,7 @@ def test_build_throws_error_for_invalid_placement(board, column, row, building):
                 ["A", "A", "A", "A", "A"],
                 ["A", "A", "A", "A", "A"],
             ],
-            True
+            True,
         ),
     ],
 )

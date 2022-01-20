@@ -10,13 +10,13 @@ def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
         # Print turn and game board
-        reply=isFull(game_board)
+        reply = isFull(game_board)
         if reply is True:
-            endgame(game_board,building_pool)
+            endgame(game_board, building_pool)
             break
         print("\nTurn " + str(turn_counter))
-        print_game(game_board,building_pool)
-        
+        print_game(game_board, building_pool)
+
         # Get randomised building
         buildings = randomise_building(building_pool)
         # Print options for turn
@@ -78,8 +78,8 @@ def game_menu(game_board, building_pool):
 def load_file(filename):
     pickle_in = open(filename, "rb")
     items = pickle.load(pickle_in)
-    item1=items[0]
-    if len(items) == 2: 
+    item1 = items[0]
+    if len(items) == 2:
         item2 = items[1]
     return (item1, item2)
 
@@ -124,7 +124,6 @@ def randomise_building(building_pool):
                     building_2 = building_categories[index]
                     break
     return [building_1, building_2]
-
 
 
 def print_board(board):
@@ -277,8 +276,8 @@ def build_grid(size):
         # print red warning using ANSI escape codes
         print("\033[91m{}\033[00m".format("Invalid dimension!"))
         return
-    board = [["" for a in range (size)] for b in range(size)]
-    return board 
+    board = [["" for a in range(size)] for b in range(size)]
+    return board
 
 
 # build building pool
@@ -344,31 +343,39 @@ def build(board, column, row, building):
 
     return board
 
+
 # check game board full
 def isFull(board):
-    for i in range (1,len(board)):
-        for j in range (1,len(board)):
-            if (board[i][j] == ""):
+    for i in range(1, len(board)):
+        for j in range(1, len(board)):
+            if board[i][j] == "":
                 return False
     return True
 
+
 # end game
-def endgame(board,pool):
+def endgame(board, pool):
     print("\nFinal layout of Simp City:")
-    print_game(board,pool)
+    print_game(board, pool)
     score = calculate_score(board)
     ans = isHigher(score, len(board))
-        
+
     # for i in high:
     #     print("{:>3} {:<38} {:0}".format(no, *i))
-#determines whether the score is higher
-def isHigher (score,size):
-    filename="high"+str(size)+".pickle"
-    high,ignore=load_file(filename)
+
+
+# determines whether the score is higher
+def isHigher(score, size):
+    filename = "high" + str(size) + ".pickle"
+    high, ignore = load_file(filename)
     for i in high:
-        if score >=i[1]:
-            position=[x[1] for x in high].index(i[1])+1
-            print("Congratulations! You made the high score board at position "+ str(position)+"!")
+        if score >= i[1]:
+            position = [x[1] for x in high].index(i[1]) + 1
+            print(
+                "Congratulations! You made the high score board at position "
+                + str(position)
+                + "!"
+            )
             name = str(input("Please enter your name (max 20 chars): "))
             high.append((name, score))
             high = sorted(high, key=itemgetter(1), reverse=True)[:10]
@@ -376,7 +383,6 @@ def isHigher (score,size):
             return
     return
 
-    
 
 def calculate_score(game_board):
     factory_count = 0
@@ -574,7 +580,8 @@ def crawl_parks(game_board, i, y, park_coords):
     # Base case - item's surroundings are already crawled through or are not parks
     return park_coords
 
-# UI to choose which highscore to view 
+
+# UI to choose which highscore to view
 def highscores_menu():
     size = None
     while True:
@@ -586,9 +593,15 @@ def highscores_menu():
         print("\n0. Back to Main Menu")
 
         option = int(input("Your choice? "))
-        size = option+3
+        size = option + 3
         try:
-            if option != 1 and option != 2 and option != 3 and option != 4 and option != 0:
+            if (
+                option != 1
+                and option != 2
+                and option != 3
+                and option != 4
+                and option != 0
+            ):
                 raise ValueError
         except ValueError:
             # print red warning using ANSI escape codes
@@ -599,21 +612,23 @@ def highscores_menu():
             return
 
         else:
-            filename="high"+str(size)+".pickle"
-            high,ignore=load_file(filename)
+            filename = "high" + str(size) + ".pickle"
+            high, ignore = load_file(filename)
             print_highscores(high)
+
 
 def print_highscores(high):
     print("---------------  HIGH SCORES  ---------------")
-    print('Pos '+f'{"Player": <35} Score')
-    print('--- '+f'{"------": <35} -----')
-    num =1
+    print("Pos " + f'{"Player": <35} Score')
+    print("--- " + f'{"------": <35} -----')
+    num = 1
     for i in high:
-        no = str(num)+'.'
+        no = str(num) + "."
         print("{:>3} {:<38} {:0}".format(no, *i))
-        num+=1
+        num += 1
     print("---------------------------------------------")
     return
+
 
 def get_items_around(game_board, i, y):
     # obtains items around a given coordinate.
@@ -641,6 +656,7 @@ def get_items_around(game_board, i, y):
     except IndexError:
         item_left = None
     return item_above, item_below, item_right, item_left
+
 
 def calculate_score(game_board):
     factory_count = 0
@@ -881,13 +897,19 @@ def main():
         print("\n0. Exit")
         option = input("Your choice? ")
         # if wanna edit pickle, it is here
-        #score = [("Please", 56), ("Work", 53), ("I", 52), ("Want", 52), ("To", 51), ("Sleep", 51), ("Very", 50), ("Badly", 49), ("Pretty", 49), ("Please", 48)]
-        #save_file(score,None,"high6.pickle")
+        # score = [("Please", 56), ("Work", 53), ("I", 52), ("Want", 52), ("To", 51), ("Sleep", 51), ("Very", 50), ("Badly", 49), ("Pretty", 49), ("Please", 48)]
+        # save_file(score,None,"high6.pickle")
 
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if option != 1 and option != 2 and option != 3  and option != 4 and option != 0:
+            if (
+                option != 1
+                and option != 2
+                and option != 3
+                and option != 4
+                and option != 0
+            ):
                 raise ValueError
         except ValueError:
             # print red warning using ANSI escape codes
