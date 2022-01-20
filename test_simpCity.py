@@ -33,14 +33,20 @@ def test_randomise_buildings_returns_valid_building(pool, expected_buildings):
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
             [["", "", "", ""], ["", "", "", ""]],
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
+        ),
+        (
+            None,
+            {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
+            None,
+            {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
         )
     ],
 )
-def test_load_game(fs, board, pool, expectedBoard, expectedPool):
+def test_load_file(fs, board, pool, expectedBoard, expectedPool):
     pickle_out = open("load_test.pickle", "wb")
     pickle.dump([board, pool], pickle_out)
     pickle_out.close()
-    eBoard, ePool = load_game("load_test.pickle")
+    eBoard, ePool = load_file("load_test.pickle")
     assert eBoard == expectedBoard
     assert ePool == expectedPool
 
@@ -54,11 +60,17 @@ def test_load_game(fs, board, pool, expectedBoard, expectedPool):
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
             [["", "", "", ""], ["", "", "", ""]],
             {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
+        ),
+        (
+            None,
+            {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
+            None,
+            {"HSE": 8, "FAC": 8, "SHP": 8, "HWY": 8, "BCH": 8},
         )
     ],
 )
-def test_save_game(board, pool, expectedBoard, expectedPool, fs):
-    save_game(board, pool, "save_test.pickle")
+def test_save_file(board, pool, expectedBoard, expectedPool, fs):
+    save_file(board, pool, "save_test.pickle")
     pickle_in = open("save_test.pickle", "rb")
     sBoard = pickle.load(pickle_in)
     assert sBoard[0] == expectedBoard

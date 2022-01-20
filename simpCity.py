@@ -2,12 +2,13 @@ from random import randint
 import pickle
 from colorama import init
 from tabulate import tabulate
+from operator import itemgetter
 
 # UI for in-game menu
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
-        # Print turn and game   board
+        # Print turn and game board
         reply=isFull(game_board)
         if reply is True:
             endgame(game_board,building_pool)
@@ -64,26 +65,27 @@ def game_menu(game_board, building_pool):
         elif option == 4:
             calculate_score(game_board)
         elif option == 5:
-            save_game(game_board, building_pool, "save.pickle")
+            save_file(game_board, building_pool, "save.pickle")
         elif option == 0:
             print("Returning to main menu...")
             return
     return
 
 
-# Function to load game data
-def load_game(filename):
+# Function to load file for game and highscore
+def load_file(filename):
     pickle_in = open(filename, "rb")
-    board = pickle.load(pickle_in)
-    game = board[0]
-    pool = board[1]
-    return (game, pool)
+    items = pickle.load(pickle_in)
+    item1=items[0]
+    if len(items) == 2: 
+        item2 = items[1]
+    return (item1, item2)
 
 
-# Function to save game data
-def save_game(board, pool, filename):
+# Function to save file for game and highscore
+def save_file(item1, item2, filename):
     pickle_out = open(filename, "wb")
-    pickle.dump([board, pool], pickle_out)
+    pickle.dump([item1, item2], pickle_out)
     pickle_out.close()
 
 
@@ -353,7 +355,26 @@ def isFull(board):
 def endgame(board,pool):
     print("\nFinal layout of Simp City:")
     print_game(board,pool)
-    calculate_score(board)
+    score = calculate_score(board)
+    ans = isHigher(score, len(board))
+        
+    # for i in high:
+    #     print("{:>3} {:<38} {:0}".format(no, *i))
+#determines whether the score is higher
+def isHigher (score,size):
+    filename="high"+str(size)+".pickle"
+    high,ignore=load_file(filename)
+    for i in high:
+        if score >=i[1]:
+            position=[x[1] for x in high].index(i[1])+1
+            print("Congratulations! You made the high score board at position "+ str(position)+"!")
+            name = str(input("Please enter your name (max 20 chars): "))
+            high.append((name, score))
+            high = sorted(high, key=itemgetter(1), reverse=True)[:10]
+            print_highscores(high)
+            return
+    return
+
     
 
 def calculate_score(game_board):
@@ -552,6 +573,46 @@ def crawl_parks(game_board, i, y, park_coords):
     # Base case - item's surroundings are already crawled through or are not parks
     return park_coords
 
+# UI to choose which highscore to view 
+def highscores_menu():
+    size = None
+    while True:
+        print("\nChoose which High Score to view:")
+        print("\n1. 4x4 High Score")
+        print("2. 5x5 High Score")
+        print("3. 6x6 High Score")
+        print("4. 7x7 High Score")
+        print("\n0. Back to Main Menu")
+
+        option = int(input("Your choice? "))
+        size = option+3
+        try:
+            if option != 1 and option != 2 and option != 3 and option != 4 and option != 0:
+                raise ValueError
+        except ValueError:
+            # print red warning using ANSI escape codes
+            print("\033[91m{}\033[00m".format("Invalid option!"))
+            continue
+
+        if option == 0:
+            return
+
+        else:
+            filename="high"+str(size)+".pickle"
+            high,ignore=load_file(filename)
+            print_highscores(high)
+
+def print_highscores(high):
+    print("---------------  HIGH SCORES  ---------------")
+    print('Pos '+f'{"Player": <35} Score')
+    print('--- '+f'{"------": <35} -----')
+    num =1
+    for i in high:
+        no = str(num)+'.'
+        print("{:>3} {:<38} {:0}".format(no, *i))
+        num+=1
+    print("---------------------------------------------")
+    return
 
 def get_items_around(game_board, i, y):
     # obtains items around a given coordinate.
@@ -588,16 +649,19 @@ def main():
         print("\nWelcome, mayor of Simp City!")
         print("----------------------------")
         print("\n1. Start new game")
-        print("2. Load new game")
-        print("3. Options")
+        print("2. Load saved game")
+        print("3. Show High Scores")
+        print("4. Options")
         print("\n0. Exit")
-
         option = input("Your choice? ")
+        # if wanna edit pickle, it is here
+        #score = [("Please", 56), ("Work", 53), ("I", 52), ("Want", 52), ("To", 51), ("Sleep", 51), ("Very", 50), ("Badly", 49), ("Pretty", 49), ("Please", 48)]
+        #save_file(score,None,"high6.pickle")
 
         # Ensure inputted option is valid
         try:
             option = int(option)
-            if option != 1 and option != 2 and option != 3 and option != 0:
+            if option != 1 and option != 2 and option != 3  and option != 4 and option != 0:
                 raise ValueError
         except ValueError:
             # print red warning using ANSI escape codes
@@ -610,10 +674,16 @@ def main():
             game_menu(game_board, building_pool)
 
         elif option == 2:
-            game_board, building_pool = load_game("save.pickle")
-            game_menu(game_board, building_pool)
+            game_board, building_pool = load_file("save.pickle")
+            if game_board or building_pool is None:
+                print("\033[91m{}\033[00m".format("No game saved!"))
+            else:
+                game_menu(game_board, building_pool)
 
         elif option == 3:
+            highscores_menu()
+
+        elif option == 4:
             size, buildings = option_menu()
 
         elif option == 0:
