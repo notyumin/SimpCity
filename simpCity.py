@@ -9,11 +9,12 @@ from operator import itemgetter
 def game_menu(game_board, building_pool):
     turn_counter = 1
     while True:
-        # Print turn and game board
         reply = isFull(game_board)
         if reply is True:
             endgame(game_board, building_pool)
             break
+        
+        # Print turn and game board
         print("\nTurn " + str(turn_counter))
         print_game(game_board, building_pool)
 
@@ -68,6 +69,7 @@ def game_menu(game_board, building_pool):
             calculate_score(game_board)
         elif option == 5:
             save_file(game_board, building_pool, "save.pickle")
+            return
         elif option == 0:
             print("Returning to main menu...")
             return
@@ -358,19 +360,12 @@ def endgame(board, pool):
     print("\nFinal layout of Simp City:")
     print_game(board, pool)
     score = calculate_score(board)
-    ans = isHigher(score, len(board))
-
-    # for i in high:
-    #     print("{:>3} {:<38} {:0}".format(no, *i))
-
-
-# determines whether the score is higher
-def isHigher(score, size):
-    filename = "high" + str(size) + ".pickle"
+    filename = "high" + str(len(board)) + ".pickle"
     high, ignore = load_file(filename)
-    for i in high:
-        if score >= i[1]:
-            position = [x[1] for x in high].index(i[1]) + 1
+    p=0
+    while p in range(len(high)):
+        if score > high[p][1]:
+            position = p + 1
             print(
                 "Congratulations! You made the high score board at position "
                 + str(position)
@@ -379,8 +374,10 @@ def isHigher(score, size):
             name = str(input("Please enter your name (max 20 chars): "))
             high.append((name, score))
             high = sorted(high, key=itemgetter(1), reverse=True)[:10]
+            save_file(high,None,filename)
             print_highscores(high)
             return
+        p+=1
     return
 
 
@@ -897,8 +894,8 @@ def main():
         print("\n0. Exit")
         option = input("Your choice? ")
         # if wanna edit pickle, it is here
-        # score = [("Please", 56), ("Work", 53), ("I", 52), ("Want", 52), ("To", 51), ("Sleep", 51), ("Very", 50), ("Badly", 49), ("Pretty", 49), ("Please", 48)]
-        # save_file(score,None,"high6.pickle")
+        #score = [("Never", 56), ("Gonna", 53), ("Give", 52), ("You", 52), ("Up", 51), ("Never", 51), ("Gonna", 50), ("Let", 49), ("You", 49), ("Down", 48)]
+        #save_file(score,None,"high4.pickle")
 
         # Ensure inputted option is valid
         try:
@@ -923,7 +920,7 @@ def main():
 
         elif option == 2:
             game_board, building_pool = load_file("save.pickle")
-            if game_board or building_pool is None:
+            if game_board and building_pool is None:
                 print("\033[91m{}\033[00m".format("No game saved!"))
             else:
                 game_menu(game_board, building_pool)
