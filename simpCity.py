@@ -30,7 +30,6 @@ def game_menu(game_board, building_pool):
         print("Your choice?")
         option = input()
 
-        turn_counter += 1
         # Ensure inputted option is valid
         try:
             option = int(option)
@@ -62,6 +61,7 @@ def game_menu(game_board, building_pool):
                     # Start loop from top & make user input again
                     continue
                 building_pool[to_be_built] -= 1
+                turn_counter += 1
                 break
         elif option == 3:
             continue
