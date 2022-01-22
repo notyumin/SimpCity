@@ -146,7 +146,7 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
 
 
 @pytest.mark.parametrize(
-    "board,column,row,building,expected_board",
+    "board,expected_spots",
     [
         (
             [
@@ -155,7 +155,7 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
                 ["", "HSE", "", ""],
                 ["", "", "", ""],
             ],
-            [(0, 0),(1, 0), (2,0), (3,1), (2,3), (1,3), (0,3)]
+            [(0, 0),(1, 0), (2,0), (3,1), (2,2), (1,2), (0,2)]
         ),
         (
             [
@@ -230,6 +230,42 @@ def test_get_buildable_returns_orthogonally_available_build_spaces(board, expect
                 ["", "", "", ""],
             ],
         ),
+        (
+            [
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+            ],
+            "A",
+            "3",
+            "BCH",
+            [
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["BCH", "", "", ""],
+                ["", "", "", ""],
+            ],
+        ),
+        (
+            [
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+            ],
+            "A",
+            "3",
+            "BCH",
+            [
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["BCH", "", "", "", ""],
+                ["", "", "", "", ""],
+                ["", "", "", "", ""],
+            ],
+        ),
     ],
 )
 def test_build_places_building_in_board(board, column, row, building, expected_board):
@@ -261,6 +297,17 @@ def test_build_places_building_in_board(board, column, row, building, expected_b
             ],
             "E",
             "3",
+            "BCH",
+        ),
+        (
+            [
+                ["", "HWY", "", ""],
+                ["", "SHP", "HSE", "BCH"],
+                ["", "HSE", "HSE", "BCH"],
+                ["", "", "", ""],
+            ],
+            "A",
+            "4",
             "BCH",
         ),
     ],
