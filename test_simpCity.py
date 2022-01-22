@@ -151,6 +151,54 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
         (
             [
                 ["", "HWY", "", ""],
+                ["", "SHP", "", ""],
+                ["", "HSE", "", ""],
+                ["", "", "", ""],
+            ],
+            [(0, 0),(1, 0), (2,0), (3,1), (2,3), (1,3), (0,3)]
+        ),
+        (
+            [
+                ["SHP", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", ""],
+            ],
+            [(1,0), (0,1)]
+        ),
+        (
+            [
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "SHP", ""],
+                ["", "", "", ""],
+            ],
+            [(1,2), (2,1), (2,3), (3, 2)]
+        ),
+        (
+            [
+                ["", "", "", ""],
+                ["", "", "", ""],
+                ["", "", "", "SHP"],
+                ["", "", "", ""],
+            ],
+            [(1,3), (2,2), (3,3)]
+        ),
+    ],
+)
+def test_get_buildable_returns_orthogonally_available_build_spaces(board, expected_spots):
+    available_build_slots = get_buildable(board)
+
+    # Assert using sets because order of list does not matter
+    assert set(expected_spots) == set(available_build_slots)
+
+
+@pytest.mark.parametrize(
+    "board,column,row,building,expected_board",
+    [
+        (
+            [
+                ["", "HWY", "", ""],
                 ["", "SHP", "HSE", "BCH"],
                 ["", "HSE", "HSE", "BCH"],
                 ["", "", "", ""],

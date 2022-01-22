@@ -337,6 +337,8 @@ def build(board, column, row, building):
 
     return board
 
+def get_buildable(board):
+    return
 
 def calculate_score(game_board):
     factory_count = 0
