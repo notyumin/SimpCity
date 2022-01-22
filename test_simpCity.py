@@ -155,7 +155,7 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
                 ["", "HSE", "", ""],
                 ["", "", "", ""],
             ],
-            [(0, 0),(1, 0), (2,0), (3,1), (2,2), (1,2), (0,2)]
+            [(0, 0), (1, 0), (2, 0), (3, 1), (2, 2), (1, 2), (0, 2)],
         ),
         (
             [
@@ -164,7 +164,7 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
                 ["", "", "", ""],
                 ["", "", "", ""],
             ],
-            [(1,0), (0,1)]
+            [(1, 0), (0, 1)],
         ),
         (
             [
@@ -173,7 +173,7 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
                 ["", "", "SHP", ""],
                 ["", "", "", ""],
             ],
-            [(1,2), (2,1), (2,3), (3, 2)]
+            [(1, 2), (2, 1), (2, 3), (3, 2)],
         ),
         (
             [
@@ -182,11 +182,13 @@ def test_set_game(buildings, size, expectedBoard, expectedPool):
                 ["", "", "", "SHP"],
                 ["", "", "", ""],
             ],
-            [(1,3), (2,2), (3,3)]
+            [(1, 3), (2, 2), (3, 3)],
         ),
     ],
 )
-def test_get_buildable_returns_orthogonally_available_build_spaces(board, expected_spots):
+def test_get_buildable_returns_orthogonally_available_build_spaces(
+    board, expected_spots
+):
     available_build_slots = get_buildable(board)
 
     # Assert using sets because order of list does not matter
