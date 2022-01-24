@@ -329,6 +329,11 @@ def build(board, column, row, building):
         if row_index > len(board[0]) or column_index > len(board):
             raise ValueError("Invalid row/column value!")
 
+    # check if is orthogonal to other buildings
+    available_spots = get_buildable(board)
+    if (row_index, column_index) not in available_spots:
+        raise ValueError("Must be orthogonally adjacent to other buildings!")
+
     # Set building in board
     if board[row_index][column_index] == "":
         board[row_index][column_index] = building
@@ -336,6 +341,37 @@ def build(board, column, row, building):
         raise ValueError("Invalid placement - block not empty")
 
     return board
+
+
+def get_buildable(game_board):
+    buildable_coords = []
+    is_empty = True
+    for row in range(0, len(game_board)):
+        for column in range(0, len(game_board)):
+            if game_board[row][column] == "":
+                continue
+            is_empty = False
+            item_above, item_below, item_right, item_left = get_items_around(
+                game_board, row, column
+            )
+            if item_above == "" or None:
+                buildable_coords.append((row - 1, column))
+            if item_below == "" or None:
+                buildable_coords.append((row + 1, column))
+            if item_left == "" or None:
+                buildable_coords.append((row, column - 1))
+            if item_right == "" or None:
+                buildable_coords.append((row, column + 1))
+    if is_empty:
+        # Return coordinates for every single position on board
+        buildable_coords = [
+            (row, col)
+            for col in range(len(game_board[row]))
+            for row in range(len(game_board))
+        ]
+    return buildable_coords
+
+    return
 
 
 def calculate_score(game_board):
