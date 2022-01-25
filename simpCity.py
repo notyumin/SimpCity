@@ -384,6 +384,7 @@ def endgame(board, pool):
             return
         p += 1
 
+
 def get_buildable(game_board):
     buildable_coords = []
     is_empty = True
