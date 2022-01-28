@@ -1,5 +1,6 @@
 from colorama import init
 from component_Logic import *
+
 init()
 
 
@@ -73,6 +74,7 @@ def game_menu(game_board, building_pool):
             return
     return
 
+
 def print_board(board):
     bList = []
     header = f"    "
@@ -94,6 +96,7 @@ def print_board(board):
     bList.append(col_separator)
     return bList
 
+
 def print_remaining_buildings(building_pool):
     data = []
     pList = []
@@ -104,6 +107,7 @@ def print_remaining_buildings(building_pool):
         pList.append(line)
     return pList
 
+
 def print_game(game_board, building_pool):
     a = print_board(game_board)
     b = print_remaining_buildings(building_pool)
@@ -112,6 +116,7 @@ def print_game(game_board, building_pool):
             b.append("")
         res = "\n".join("{} {:>35}".format(x, y) for x, y in zip(a, b))
         print(res + "\n")
+
 
 # UI to choose city size/building pool
 def option_menu():
@@ -140,6 +145,7 @@ def option_menu():
         elif option == 0:
             return size, buildings
 
+
 # UI to choose citysize menu
 def choose_citysize():
     print("\nCity Size available in the SimpCity: ")
@@ -162,6 +168,7 @@ def choose_citysize():
     else:
         size = option + 3
         return size
+
 
 # UI to choose building pool
 def choose_building():
@@ -208,6 +215,7 @@ def choose_building():
         return
     return buildings
 
+
 # end game
 def endgame(board, pool):
     print("\nFinal layout of Simp City:")
@@ -231,6 +239,7 @@ def endgame(board, pool):
             print_highscores(high)
             return
         p += 1
+
 
 # UI to choose which highscore to view
 def highscores_menu():
