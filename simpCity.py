@@ -1,8 +1,3 @@
-# initial commit
-print("Welcome, mayor of Simp City")
-print("----------------------------")
-
-
 def init_game():
     game_board = [
         # e.g. ['SHP','FAC','BCH','HWY']
@@ -68,4 +63,5 @@ def main():
             exit()
 
 
-main()
+if __name__ == "__main__":
+    main()
