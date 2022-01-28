@@ -2,6 +2,7 @@ from colorama import init
 from component_Logic import *
 init()
 
+
 # UI for in-game menu
 def game_menu(game_board, building_pool):
     turn_counter = 1
