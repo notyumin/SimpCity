@@ -1,5 +1,5 @@
 import pytest
-from simpCity import *
+from component_Logic import *
 import pickle
 
 
