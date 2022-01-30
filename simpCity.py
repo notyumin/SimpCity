@@ -1,3 +1,6 @@
+from tabulate import tabulate
+from operator import itemgetter
+from re import sub
 from colorama import init
 from component_Logic import *
 init()

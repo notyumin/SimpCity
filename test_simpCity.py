@@ -324,6 +324,50 @@ def test_build_places_building_in_board(board, column, row, building, expected_b
             "4",
             "BCH",
         ),
+        (
+            [
+                ["", "HWY", "", ""],
+                ["", "SHP", "HSE", "BCH"],
+                ["", "HSE", "HSE", "BCH"],
+                ["", "", "", ""],
+            ],
+            "A",
+            "A",
+            "BCH",
+        ),
+        (
+            [
+                ["", "HWY", "", ""],
+                ["", "SHP", "HSE", "BCH"],
+                ["", "HSE", "HSE", "BCH"],
+                ["", "", "", ""],
+            ],
+            "A",
+            "987",
+            "BCH",
+        ),
+        (
+            [
+                ["", "HWY", "", ""],
+                ["", "SHP", "HSE", "BCH"],
+                ["", "HSE", "HSE", "BCH"],
+                ["", "", "", ""],
+            ],
+            "~",
+            "4",
+            "BCH",
+        ),
+        (
+            [
+                ["", "HWY", "", ""],
+                ["", "SHP", "HSE", "BCH"],
+                ["", "HSE", "HSE", "BCH"],
+                ["", "", "", ""],
+            ],
+            1,
+            "4",
+            "BCH",
+        ),
     ],
 )
 def test_build_throws_error_for_invalid_placement(board, column, row, building):

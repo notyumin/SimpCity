@@ -1,8 +1,6 @@
 import pickle
-from tabulate import tabulate
-from operator import itemgetter
 from random import randint
-from re import sub
+
 
 # Function to load file for game and highscore
 def load_file(filename):
@@ -48,9 +46,9 @@ def randomise_building(building_pool):
                 # Decrement amount of building category
                 building_values[index] -= 1
                 # Set building for building 1/2
-                if building_1 == None:
+                if building_1 is None:
                     building_1 = building_categories[index]
-                elif building_2 == None:
+                elif building_2 is None:
                     building_2 = building_categories[index]
                     break
     return [building_1, building_2]
@@ -110,7 +108,7 @@ def build(board, column, row, building):
     # Obtains index from  letter by getting unicode value of letter
     try:
         column_index = ord(column.lower()) - 97
-    except:
+    except ValueError:
         raise ValueError("Invalid column value!")
     else:
         if column_index < 0 or column_index > 25:
@@ -119,21 +117,21 @@ def build(board, column, row, building):
     try:
         row_index = int(row) - 1
     except ValueError as error:
-        raise
+        raise error
     else:
         if row_index > len(board[0]) or column_index > len(board):
             raise ValueError("Invalid row/column value!")
+
+    # Set building in board
+    if board[row_index][column_index] != "":
+        raise ValueError("Invalid placement - block not empty")
 
     # check if is orthogonal to other buildings
     available_spots = get_buildable(board)
     if (row_index, column_index) not in available_spots:
         raise ValueError("Must be orthogonally adjacent to other buildings!")
 
-    # Set building in board
-    if board[row_index][column_index] == "":
-        board[row_index][column_index] = building
-    else:
-        raise ValueError("Invalid placement - block not empty")
+    board[row_index][column_index] = building
 
     return board
 
@@ -174,8 +172,6 @@ def get_buildable(game_board):
             for row in range(len(game_board))
         ]
     return buildable_coords
-
-    return
 
 
 def calculate_score(game_board):
@@ -378,12 +374,10 @@ def crawl_parks(game_board, i, y, park_coords):
 def get_items_around(game_board, i, y):
     # obtains items around a given coordinate.
     # Returns none for an item if it's out-of-bounds
-    try:
-        if (i - 1) >= 0:
-            item_above = game_board[i - 1][y]
-        else:
-            item_above = None
-    except IndexError:
+    # Prevent negative indexing by ensuring it's more than 0
+    if (i - 1) >= 0:
+        item_above = game_board[i - 1][y]
+    else:
         item_above = None
     try:
         item_below = game_board[i + 1][y]
@@ -393,11 +387,9 @@ def get_items_around(game_board, i, y):
         item_right = game_board[i][y + 1]
     except IndexError:
         item_right = None
-    try:
-        if (y - 1) >= 0:
-            item_left = game_board[i][y - 1]
-        else:
-            item_left = None
-    except IndexError:
+    # Prevent negative indexing by ensuring it's more than 0
+    if (y - 1) >= 0:
+        item_left = game_board[i][y - 1]
+    else:
         item_left = None
     return item_above, item_below, item_right, item_left
