@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest pytest-cov
+          pip install flake8 pytest pytest-cov colorama tabulate
 
       - name: Checkout Own Repo to cloud
         uses: actions/checkout@v2
@@ -42,10 +42,9 @@ jobs:
       - name: Begin Pytest
         run: |
           ls
+          rm test_simpCity.py
           mv ./tests/*.* ./
           pytest --cov -v --junitxml=report.xml
-          echo "check for report.xml:"
-          ls
       - if: ${{failure()}}
         name: Create Issues
         uses: nashmaniac/create-issue-action@v1.1
