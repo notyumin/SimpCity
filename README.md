@@ -14,7 +14,19 @@
     - [Decision Matrix](#decision-matrix)
     - [Verdict](#verdict)
   - [Language Chosen](#language-chosen)
+    - [1. Syntax Simplicity](#1-syntax-simplicity)
+    - [2. Testing Support](#2-testing-support)
+    - [3. Prior Knowledge](#3-prior-knowledge)
   - [Our Workflow](#our-workflow)
+    - [Stage 0: From Requirement to User Story](#stage-0-from-requirement-to-user-story)
+    - [Stage 1: From User Story to Developer](#stage-1-from-user-story-to-developer)
+    - [Stage 2: From Developer to QA](#stage-2-from-developer-to-qa)
+    - [Stage 2.5: From QA back to Developer](#stage-25-from-qa-back-to-developer)
+    - [Stage 3: From QA to Team](#stage-3-from-qa-to-team)
+    - [Stage 4: From Team to main branch](#stage-4-from-team-to-main-branch)
+  - [Considerations for Workflow](#considerations-for-workflow)
+    - [Branching System](#branching-system)
+    - [Auto vs Manual QA](#auto-vs-manual-qa)
 
 ## Choosing Our SDLC
 
@@ -186,7 +198,7 @@ Criteria used for analysis:
 >At the start of the project, core requirements are known but will be expected to change over time as the project progresses.
 >
 >This SDLC places a strong emphasis on producing working software based on the requirements provided as quickly as possible, with test-driven development aimed to implement features incrementally.
->It is highly adaptable to changing requirements as each sprint will attempt to implement a set number of features, which are decided at the end of the previous sprint.
+>It is highly adaptable **to** changing requirements as each sprint will attempt to implement a set number of features, which are decided at the end of the previous sprint.
 >While documentation may be brief, the features and changes implemented in each sprint must be clearly documented to display work done to the client.
 >
 >The client is present throughout the process to validate the work done and will likely provide additional requirements throughout the entire SDLC.
@@ -277,8 +289,36 @@ In the end, our chosen SDLC was **Agile** because it fit our requirements the be
 
 ## Language Chosen
 
-todo
+The language of choice for this project is `Python`. It was chosen for a few reasons:
+### 1. Syntax Simplicity
+Python's syntax omits many symbols such as braces `()`, curly braces `{}`, and semi-colons `;`
+### 2. Testing Support
+### 3. Prior Knowledge 
 
 ## Our Workflow
 
-todo
+This section details our DevOps processes.
+
+### Stage 0: From Requirement to User Story
+Team reads requirement and creates issue for it in Git. Scrum Master/Tech Lead reviews and makes changes of necessary.
+
+### Stage 1: From User Story to Developer
+Assigned by Scrum Master/Self-assigned by developer during daily standups/after previous user story is done. Assign devs accordingly in the respective Git Issues. During assignment, User Story should be broken down into "tasks".
+
+### Stage 2: From Developer to QA
+- Developer finished feature (all unit tests pass)
+- Notify QA after feature is done to check functionality. 
+
+### Stage 2.5: From QA back to Developer
+If any issues found in stage 2, QA tells Developer so he can change. Then stage 2 repeats. 
+
+### Stage 3: From QA to Team
+After QA greenlights, dev merges to Main branch
+
+### Stage 4: From Team to main branch
+At end of sprint, git tag the code and automatically release to client
+
+## Considerations for Workflow
+### Branching System
+
+### Auto vs Manual QA
