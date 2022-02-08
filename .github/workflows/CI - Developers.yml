@@ -71,9 +71,9 @@ jobs:
           black_args: "."
       
       - name: Push formatted changes
-        if: steps.action_black.outputs.is_formatted == 'true'
+        if: steps.action_black.outputs.is_formatted == 'true'  && github.head_ref != ''
         run: |
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
             git commit -am "Formatted code"
-            git push origin HEAD:${{ github.GITHUB_REF }}
+            git push origin HEAD:${{ github.head_ref }}
