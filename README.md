@@ -22,12 +22,9 @@
     - [Stage 0: From Requirement to User Story](#stage-0-from-requirement-to-user-story)
     - [Stage 1: From User Story to Developer](#stage-1-from-user-story-to-developer)
     - [Stage 2: From Developer to QA](#stage-2-from-developer-to-qa)
-    - [Stage 2.5: From QA back to Developer](#stage-25-from-qa-back-to-developer)
     - [Stage 3: From QA to Team](#stage-3-from-qa-to-team)
-    - [Stage 4: From Team to main branch](#stage-4-from-team-to-main-branch)
-  - [Considerations for Workflow](#considerations-for-workflow)
-    - [Branching System](#branching-system)
-    - [Auto vs Manual QA](#auto-vs-manual-qa)
+    - [Stage 4: From Team to Main branch](#stage-4-from-team-to-main-branch)
+  - [Stage 5: From Main branch to Client](#stage-5-from-main-branch-to-client)
 
 ## Choosing Our SDLC
 
@@ -301,25 +298,26 @@ Python's syntax omits many symbols such as braces `()`, curly braces `{}`, and s
 This section details our DevOps processes.
 
 ### Stage 0: From Requirement to User Story
-Team reads requirement and creates issue for it in Git. Scrum Master/Tech Lead reviews and makes changes of necessary.
+- Team reads requirement and creates issue for it in Github. Scrum Master/Tech Lead reviews and makes changes if necessary.
 
 ### Stage 1: From User Story to Developer
-Assigned by Scrum Master/Self-assigned by developer during daily standups/after previous user story is done. Assign devs accordingly in the respective Git Issues. During assignment, User Story should be broken down into "tasks".
+- Self-assigned by developer during daily standups/after previous user story is done.
+- Assign devs accordingly in the respective Github Issues.
+- Break User Story down into "tasks"
+- Developer creates feature branch and begins coding
 
 ### Stage 2: From Developer to QA
 - Developer finished feature (all unit tests pass)
-- Notify QA after feature is done to check functionality. 
-
-### Stage 2.5: From QA back to Developer
-If any issues found in stage 2, QA tells Developer so he can change. Then stage 2 repeats. 
+- Create Pull Request to main branch
+- On creation of pull request, Github Actions will run the QA’s tests on the code being merged.
+- If QA tests fail, Developer makes changes and repeats stage 2
 
 ### Stage 3: From QA to Team
-After QA greenlights, dev merges to Main branch
+- After QA tests have passed, developer will request the appropriate members to review the code being merged.
+- If reviewers find any issues, Developer makes changes and go back to stage 2
 
-### Stage 4: From Team to main branch
-At end of sprint, git tag the code and automatically release to client
+### Stage 4: From Team to Main branch
+- After everyone approves, the pull request is completed and the code is merged into main branch
 
-## Considerations for Workflow
-### Branching System
-
-### Auto vs Manual QA
+## Stage 5: From Main branch to Client
+- At end of sprint, do manual testing, then git tag the code and automatically release to client
