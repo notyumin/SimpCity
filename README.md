@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/notyumin/SimpCity/branch/development/graph/badge.svg?token=DBJ0D3XJNB)](https://codecov.io/gh/notyumin/SimpCity)
 # SimpCity Software Development Journal
 
 ## Table of Contents
